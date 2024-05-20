@@ -36,7 +36,7 @@ export default function SigninScreen({navigation}) {
                 setPassword('');
                 dispatch(login(data.userData));
             }else if (data.result===false){
-
+                setErrorMessage(data.error)
             }
         });
     }
@@ -64,7 +64,7 @@ export default function SigninScreen({navigation}) {
 
             <View style={styles.emailConnectContainer}>
                 <View style={styles.errorMessageContainer}>
-                    <Text style={styles.errorMessage}>test message erreur{errorMessage}</Text>
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
                 </View>
                 <View style={styles.dropShadow}>
                     <View style={styles.fieldSet}>
@@ -144,11 +144,13 @@ const styles = StyleSheet.create({
         alignItems:'center',
     },
     errorMessageContainer:{
-        width:'100%'
+        width:'80%',
+        marginBottom:2
     },
     errorMessage:{
         color:'red',
-        alignSelf:'flex-end'
+        alignSelf:'flex-end',
+        fontSize:11
     },
     dropShadow:{
         width:'80%',

@@ -9,10 +9,27 @@ export default function SignupScreen({navigation}) {
 
     const [email, setEmail]=useState('')
     const [password, setPassword]=useState('')
+    const [checkPassword, setCheckPassword]=useState('')
     const [firstname, setFirstname]=useState('')
     const [lastname, setLastname]=useState('')
+    const [errorMessage, setErrorMessage]=useState('')
 
     const handleSubmit = async () => {
+
+        if(password!=checkPassword){
+            setErrorMessage('Les mots de passe ne correspondent pas')
+            return;
+        }
+
+        if(!String(email).toLowerCase().match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
+            setErrorMessage("L'adresse mail est invalide")
+            return;
+        }
+
+        if(!String(password).toLowerCase().match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)){
+            setErrorMessage('Le mot de passe doit contenir au moins 8 caractères dont une lettre, un numéro et un caractère spécial')
+            return;
+        }
 
         const hashedPassword = await Crypto.digestStringAsync(
             Crypto.CryptoDigestAlgorithm.SHA256, password
@@ -25,10 +42,13 @@ export default function SignupScreen({navigation}) {
 		}).then(response => response.json())
         .then(data => {
             if (data.result) {
+                setErrorMessage('')
                 setEmail('');
                 setPassword('');
                 setFirstname('');
                 setLastname('');
+            }else if (data.result===false){
+                setErrorMessage(data.error)
             }
         });
     }
@@ -37,7 +57,7 @@ export default function SignupScreen({navigation}) {
         <View style={styles.container}>
 
             <View style={styles.emailConnectContainer}>
-            <View style={styles.dropShadow}>
+                <View style={styles.dropShadow}>
                     <View style={styles.fieldSet}>
                         <Text style={styles.legend}>Prénom</Text>
                         <TextInput style={styles.inputs} onChangeText={(value)=>setFirstname(value)}></TextInput>
@@ -64,8 +84,11 @@ export default function SignupScreen({navigation}) {
                 <View style={styles.dropShadow}>
                     <View style={styles.fieldSet}>
                         <Text style={styles.legend}>Confirmez le mot de passe</Text>
-                        <TextInput style={styles.inputs}></TextInput>
+                        <TextInput type='password' style={styles.inputs} onChangeText={(value)=>setCheckPassword(value)}></TextInput>
                     </View>
+                </View>
+                <View style={styles.errorMessageContainer}>
+                    <Text style={styles.errorMessage}>{errorMessage}</Text>
                 </View>
                 <TouchableOpacity style={styles.loginBtn} onPress={()=>handleSubmit()}>
                     <Text style={styles.loginBtnTxt}>Connexion</Text>
@@ -93,6 +116,16 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent:'center',
         alignItems:'center',
+    },
+    errorMessageContainer:{
+        width:'80%',
+        marginBottom:2,
+        marginTop:15,
+    },
+    errorMessage:{
+        color:'red',
+        alignSelf:'flex-end',
+        fontSize:11
     },
     dropShadow:{
         width:'80%',
