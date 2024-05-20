@@ -38,8 +38,8 @@ function AccountStackScreen() {
       headerTitleAlign: 'center'
     })}>
 
-      <AccountStack.Screen name="Signin" component={SigninScreen} />
-      <AccountStack.Screen name="Signup" component={SignupScreen} />
+      <AccountStack.Screen name="Connexion" component={SigninScreen} />
+      <AccountStack.Screen name="Créer un compte" component={SignupScreen} />
     </AccountStack.Navigator>
   );
 }
@@ -54,15 +54,15 @@ export default function App() {
             tabBarIcon: ({ color, size }) => {
               let iconName = '';
 
-              if (route.name === 'Home') {
-                iconName = 'home';
-              } else if (route.name === 'MyFlights') {
+              if (route.name === 'Recherche') {
+                iconName = 'search';
+              } else if (route.name === 'Mes vols') {
                 iconName = 'globe';
               }
-              else if (route.name === 'Settings') {
+              else if (route.name === 'Paramètres') {
                 iconName = 'gear';
               }
-              else if (route.name === 'Account') {
+              else if (route.name === 'Compte') {
                 iconName = 'user';
               }
 
@@ -87,11 +87,11 @@ export default function App() {
             },
             headerShown: false,
           })}>
-            <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="MyFlights" component={MyFlightsScreen} />
-            <Tab.Screen name="Settings" component={SettingsScreen} />
+            <Tab.Screen name="Recherche" component={HomeScreen} />
+            <Tab.Screen name="Mes vols" component={MyFlightsScreen} />
+            <Tab.Screen name="Paramètres" component={SettingsScreen} />
             
-            <Tab.Screen name="Account" component={AccountStackScreen} />
+            <Tab.Screen name="Compte" component={AccountStackScreen} />
             
           </Tab.Navigator>
         </NavigationContainer>
