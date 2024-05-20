@@ -5,29 +5,28 @@ import { colors } from '../assets/colors'
 
 import * as Crypto from 'expo-crypto';
 
-const bcryptjs = require('bcryptjs');
-
 export default function SigninScreen({navigation}) {
 
     const [email, setEmail]=useState('')
     const [password, setPassword]=useState('')
 
     const handleSubmit = async () => {
+        console.log('front')
         const hashedPassword = await Crypto.digestStringAsync(
             Crypto.CryptoDigestAlgorithm.SHA256, password
         )
-
-        fetch('http://localhost:3000/users/signup', {
+        console.log(hashedPassword)
+        fetch('http://localhost:3000/user/signin', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: email, password: hashedPassword }),
 		}).then(response => response.json())
-			.then(data => {
-				if (data.result) {
-					setEmail('');
-					setPassword('');
-				}
-			});
+        .then(data => {
+            if (data.result) {
+                setEmail('');
+                setPassword('');
+            }
+        });
     }
 
     return (
@@ -137,6 +136,7 @@ const styles = StyleSheet.create({
         shadowRadius: 4.84,
         elevation:8,
         marginBottom:20,
+        borderRadius: 5,
     },
     fieldSet:{
         width:'100%',
@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent:'center',
         height:40,
-        //backgroundColor:'red'
     },
     loginBtn:{
         width:'80%',
