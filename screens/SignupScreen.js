@@ -1,4 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
+
+import {colors} from '../assets/colors'
 
 export default function SignupScreen() {
     return (
@@ -10,7 +12,10 @@ export default function SignupScreen() {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        height: '100%',
+        flex:1,
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:colors.lightGrey,
     },
 });

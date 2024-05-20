@@ -1,16 +1,21 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Platform, StatusBar } from 'react-native';
+
+import {colors} from '../assets/colors'
 
 export default function HomeScreen() {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Text>HomeScreen</Text>
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        height: '100%',
+        flex:1,
+        paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:colors.lightGrey,
     },
 });
