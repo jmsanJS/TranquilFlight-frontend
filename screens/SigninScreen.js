@@ -5,10 +5,19 @@ import { colors } from '../assets/colors'
 
 import * as Crypto from 'expo-crypto';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../reducers/user';
+
 export default function SigninScreen({navigation}) {
+
+    const user = useSelector((state) => state.user.value);
+    console.log('user----->',user)
+
+    const dispatch = useDispatch();
 
     const [email, setEmail]=useState('')
     const [password, setPassword]=useState('')
+    const [errorMessage, setErrorMessage]=useState('')
 
     const handleSubmit = async () => {
         console.log('front')
@@ -25,6 +34,9 @@ export default function SigninScreen({navigation}) {
             if (data.result) {
                 setEmail('');
                 setPassword('');
+                dispatch(login(data.userData));
+            }else if (data.result===false){
+
             }
         });
     }
@@ -51,6 +63,9 @@ export default function SigninScreen({navigation}) {
             </View>
 
             <View style={styles.emailConnectContainer}>
+                <View style={styles.errorMessageContainer}>
+                    <Text style={styles.errorMessage}>test message erreur{errorMessage}</Text>
+                </View>
                 <View style={styles.dropShadow}>
                     <View style={styles.fieldSet}>
                         <Text style={styles.legend}>Email</Text>
@@ -127,6 +142,13 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent:'center',
         alignItems:'center',
+    },
+    errorMessageContainer:{
+        width:'100%'
+    },
+    errorMessage:{
+        color:'red',
+        alignSelf:'flex-end'
     },
     dropShadow:{
         width:'80%',
