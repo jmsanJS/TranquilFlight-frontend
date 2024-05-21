@@ -52,7 +52,6 @@ function AccountStackScreen() {
       headerTintColor:'white',
       headerTitleAlign: 'center'
     })}>
-
       <AccountStack.Screen name="Connexion" component={SigninScreen} />
       <AccountStack.Screen name="Créer un compte" component={SignupScreen} />
       <AccountStack.Screen name="Mon Compte" component={AccountScreen} />

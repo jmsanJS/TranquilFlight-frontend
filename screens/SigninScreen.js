@@ -38,7 +38,7 @@ export default function SigninScreen({navigation}) {
                 setEmail('');
                 setPassword('');
                 dispatch(login(data.userData));
-                navigation.navigate('Mon Compte')
+                navigation.navigate('Recherche')
             }else if (data.result===false){
                 setErrorMessage(data.error)
             }
