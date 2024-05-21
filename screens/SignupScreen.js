@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, Platform, StatusBar, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
-import { useState } from 'react'
+import { useState, useSelector } from 'react'
 
 import { colors } from '../assets/colors'
 
@@ -13,6 +13,11 @@ export default function SignupScreen({navigation}) {
     const [firstname, setFirstname]=useState('')
     const [lastname, setLastname]=useState('')
     const [errorMessage, setErrorMessage]=useState('')
+
+    const user = useSelector((state) => state.user.value);
+    if (user.email != null){
+        navigation.navigate('Mon Compte')
+    }
 
     const handleSubmit = async () => {
 
@@ -47,7 +52,7 @@ export default function SignupScreen({navigation}) {
                 setPassword('');
                 setFirstname('');
                 setLastname('');
-                navigation.navigate('Mon Compte')
+                navigation.navigate('Recherche')
             }else if (data.result===false){
                 setErrorMessage(data.error)
             }

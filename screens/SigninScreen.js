@@ -39,30 +39,28 @@ export default function SigninScreen({ navigation }) {
     setIsFocused((prevState) => ({ ...prevState, [key]: false }));
   };
 
-  const handleSubmit = async () => {
-    console.log("front");
-    const hashedPassword = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.SHA256,
-      password
-    );
-    console.log(hashedPassword);
-    fetch("http://localhost:3000/user/signin", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email, password: hashedPassword }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.result) {
-          setEmail("");
-          setPassword("");
-          dispatch(login(data.userData));
-          navigation.navigate("Mon Compte");
-        } else if (data.result === false) {
-          setErrorMessage(data.error);
-        }
-      });
-  };
+    const handleSubmit = async () => {
+        console.log('front')
+        const hashedPassword = await Crypto.digestStringAsync(
+            Crypto.CryptoDigestAlgorithm.SHA256, password
+        )
+        console.log(hashedPassword)
+        fetch('http://localhost:3000/user/signin', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ email: email, password: hashedPassword }),
+		}).then(response => response.json())
+        .then(data => {
+            if (data.result) {
+                setEmail('');
+                setPassword('');
+                dispatch(login(data.userData));
+                navigation.navigate('Recherche')
+            }else if (data.result===false){
+                setErrorMessage(data.error)
+            }
+        });
+    }
 
   return (
     <KeyboardAvoidingView
