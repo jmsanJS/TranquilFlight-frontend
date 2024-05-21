@@ -86,6 +86,7 @@ export default function App() {
               color: 'blue', // Specify the height of your custom header
             },
             headerShown: false,
+            tabBarHideOnKeyboard: true,
           })}>
             <Tab.Screen name="Recherche" component={HomeScreen} />
             <Tab.Screen name="Mes vols" component={MyFlightsScreen} />

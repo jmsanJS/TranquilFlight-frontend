@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Platform, StatusBar, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Platform, StatusBar, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
 import { useState } from 'react'
 
 import { colors } from '../assets/colors'
@@ -41,7 +41,9 @@ export default function SigninScreen({navigation}) {
     }
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}>
 
             <View style={styles.ApisConnectContainer}>
                 <TouchableOpacity style={styles.ApisConnectBtn}>
@@ -68,13 +70,13 @@ export default function SigninScreen({navigation}) {
                 <View style={styles.dropShadow}>
                     <View style={styles.fieldSet}>
                         <Text style={styles.legend}>Email</Text>
-                        <TextInput style={styles.inputs} onChangeText={(value)=>setEmail(value)}></TextInput>
+                        <TextInput cursorColor={colors.light1} allowFontScaling={true} keyboardType="email-address" style={styles.inputs} onChangeText={(value)=>setEmail(value)}></TextInput>
                     </View>
                 </View>
                 <View style={styles.dropShadow}>
                     <View style={styles.fieldSet}>
                         <Text style={styles.legend}>Mot de passe</Text>
-                        <TextInput style={styles.inputs} onChangeText={(value)=>setPassword(value)}></TextInput>
+                        <TextInput cursorColor={colors.light1} allowFontScaling={true} secureTextEntry={true} textContentType={'password'} style={styles.inputs} onChangeText={(value)=>setPassword(value)}></TextInput>
                     </View>
                 </View>
                 <TouchableOpacity style={styles.loginBtn} onPress={()=>handleSubmit()}>
@@ -85,7 +87,7 @@ export default function SigninScreen({navigation}) {
                 </TouchableOpacity>
             </View>
 
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
@@ -170,8 +172,8 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         alignItems: 'center',
         borderColor: '#000',
+        borderColor: colors.dark1,
         backgroundColor : colors.lightGrey,
-        elevation:4,
         
     },
     legend:{
@@ -181,12 +183,14 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         paddingHorizontal:3,
         fontSize:11,
-        backgroundColor: colors.lightGrey
+        backgroundColor: colors.lightGrey,
+        color:colors.dark1,
     },
     inputs:{
         width:'100%',
         justifyContent:'center',
         height:40,
+        color:colors.light1,
     },
     loginBtn:{
         width:'80%',
