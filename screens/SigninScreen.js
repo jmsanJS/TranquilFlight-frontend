@@ -12,6 +12,10 @@ export default function SigninScreen({navigation}) {
 
     const user = useSelector((state) => state.user.value);
 
+    if (user.email != null){
+        navigation.navigate('Mon Compte')
+    }
+
     const dispatch = useDispatch();
 
     const [email, setEmail]=useState('')
@@ -34,6 +38,7 @@ export default function SigninScreen({navigation}) {
                 setEmail('');
                 setPassword('');
                 dispatch(login(data.userData));
+                navigation.navigate('Mon Compte')
             }else if (data.result===false){
                 setErrorMessage(data.error)
             }
@@ -155,11 +160,6 @@ const styles = StyleSheet.create({
     },
     dropShadow:{
         width:'80%',
-        shadowOffset: { width: 5, height: 9 },
-        shadowColor: 'black',
-        shadowOpacity: 0.2,
-        shadowRadius: 4.84,
-        elevation:8,
         marginBottom:20,
         borderRadius: 5,
     },

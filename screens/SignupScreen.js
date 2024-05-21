@@ -47,6 +47,7 @@ export default function SignupScreen({navigation}) {
                 setPassword('');
                 setFirstname('');
                 setLastname('');
+                navigation.navigate('Mon Compte')
             }else if (data.result===false){
                 setErrorMessage(data.error)
             }
