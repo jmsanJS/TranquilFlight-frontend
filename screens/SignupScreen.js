@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Platform, StatusBar, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native';
-import { useState, useSelector } from 'react'
+import { useState } from 'react'
+import { useSelector } from 'react-redux';
 
 import { colors } from '../assets/colors'
 
