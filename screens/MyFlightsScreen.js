@@ -1,8 +1,25 @@
-import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Platform,
+    StatusBar,
+    TouchableOpacity,
+    TextInput,
+    KeyboardAvoidingView,
+} from "react-native";
+import { useState } from "react";
 
-import {colors} from '../assets/colors'
+import { colors } from "../assets/colors";
 
-export default function MyFlightsScreen() {
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite, removeFavorite } from "../reducers/favoriteFlights";
+
+export default function MyFlightsScreen({navigation}) {
+
+    const user = useSelector((state) => state.user.value);
+    const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
+
     return (
         <View style={styles.container}>
             <Text>MyFlightsScreen</Text>
