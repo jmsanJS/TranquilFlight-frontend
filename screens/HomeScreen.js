@@ -60,9 +60,7 @@ export default function HomeScreen({ navigation }) {
     fetch(`http://localhost:3000/flights/${numberOfFlight}/${dateOfFlight}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log("test fetch front", data);
         if (data.result) {
-          console.log("test fetch front dans le if", data);
           dispatch(addFlight(data.flightData));
           navigation.navigate("Résultats de recherche");
         } else if (data.result === false) {
@@ -85,7 +83,7 @@ export default function HomeScreen({ navigation }) {
       </ImageBackground>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.searchContainer}
+        style={styles.keyboardAvoidingViewContainer}
       >
         <View style={styles.searchContainer}>
           <View style={styles.dropShadow}>
@@ -179,8 +177,15 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 25,
   },
-  searchContainer: {
+  keyboardAvoidingViewContainer: {
     flex: 4,
+    width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.lightGrey
+  },
+  searchContainer: {
+    flex: 1,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",

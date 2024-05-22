@@ -77,12 +77,12 @@ function SearchStackScreen() {
         headerTitleAlign: "center",
       })}
     >
+      <SearchStack.Screen name="Résultats de recherche" component={SearchResultScreen} />
       <SearchStack.Screen
         options={{ headerShown: false }}
         name="Home"
         component={HomeScreen}
       />
-      {/* <SearchStack.Screen name="Résultats de recherche" component={SearchResultScreen} /> */}
     </SearchStack.Navigator>
   );
 }
