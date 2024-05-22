@@ -45,7 +45,7 @@ export default function SigninScreen({ navigation }) {
             Crypto.CryptoDigestAlgorithm.SHA256, password
         )
         console.log(hashedPassword)
-        fetch('http://localhost:3000/user/signin', {
+    fetch('http://localhost:3000/user/signin', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: email, password: hashedPassword }),
