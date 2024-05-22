@@ -19,13 +19,14 @@ import {colors} from './assets/colors'
 import { Provider } from 'react-redux';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
+import flightsResult from './reducers/flightsResult';
 
 // redux-persist imports
 import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const reducers = combineReducers({ user });
+const reducers = combineReducers({ user, flightsResult });
 const persistConfig = {
   key: 'TranquilFlight',
   storage: AsyncStorage,
