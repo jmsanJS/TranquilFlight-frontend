@@ -83,6 +83,7 @@ function SearchStackScreen() {
         name="Home"
         component={HomeScreen}
       />
+      <SearchStack.Screen name="Résultats de recherche" component={SearchResultScreen} />
     </SearchStack.Navigator>
   );
 }
