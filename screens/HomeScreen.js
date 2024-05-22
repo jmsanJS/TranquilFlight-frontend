@@ -32,6 +32,7 @@ export default function HomeScreen({ navigation }) {
         style={styles.homeImage}
         alt="Home image"
       >
+        
         {user.firstname ? (
           <Text style={styles.welcomeUserIfConnected}>
             Bonjour {user.firstname}
