@@ -14,6 +14,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { addFlight } from "../reducers/flightsResult";
 
 import { colors } from "../assets/colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -26,10 +27,12 @@ export default function HomeScreen() {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [dateOfFlight, setDateOfFlight] = useState(null);
   const [numberOfFlight, setNumberOfFlight] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  
+  const flightsResult = useSelector((state) => state.flightsResult.value);
+
   const handleFocus = (key) => {
     setIsFocused((prevState) => ({ ...prevState, [key]: true }));
   };
@@ -52,19 +55,16 @@ export default function HomeScreen() {
   };
 
   const handleSearchClick = () => {
-    // if () {
-		// 	return;
-		// }
-
-    fetch("http://localhost:3000/flights", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ flightNumber: flightNumber, date: formatedDate }),
-    })
+    setErrorMessage("")
+    fetch(`http://localhost:3000/flights/${numberOfFlight}/${dateOfFlight}`)
       .then((response) => response.json())
       .then((data) => {
+        console.log('test fetch front', data)
         if (data.result) {
+          console.log('test fetch front dans le if', data)
+          dispatch(addFlight(data.flightData));
         } else if (data.result === false) {
+          setErrorMessage(data.error);
         }
       });
   };
@@ -140,7 +140,9 @@ export default function HomeScreen() {
             onCancel={hideDatePicker}
           />
         </View>
-
+        <View style={styles.errorMessageContainer}>
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+        </View>
         <TouchableOpacity
           onPress={() => handleSearchClick()}
           style={styles.searchBtn}
@@ -224,6 +226,16 @@ const styles = StyleSheet.create({
   //   backgroundColor: colors.dark1,
   //   color: colors.dark1
   // },
+  errorMessageContainer: {
+    width: "80%",
+    marginBottom: 2,
+    marginTop: 0,
+  },
+  errorMessage: {
+    color: "red",
+    alignSelf: "flex-end",
+    fontSize: 11,
+  },
   searchBtn: {
     width: "80%",
     backgroundColor: colors.hot1,
