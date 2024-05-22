@@ -5,21 +5,31 @@ import {
   SafeAreaView,
   Platform,
   StatusBar,
-  Image,
   TextInput,
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
+
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { colors } from "../assets/colors";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default function HomeScreen() {
-  const [isFocused, setIsFocused] = useState({ email: false, password: false });
+  const [isFocused, setIsFocused] = useState({
+    flightNumber: false,
+    flightDate: false,
+  });
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [dateOfFlight, setDateOfFlight] = useState(null);
+  const [numberOfFlight, setNumberOfFlight] = useState(null);
 
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  // console.log(user);
+  
   const handleFocus = (key) => {
     setIsFocused((prevState) => ({ ...prevState, [key]: true }));
   };
@@ -28,6 +38,36 @@ export default function HomeScreen() {
     setIsFocused((prevState) => ({ ...prevState, [key]: false }));
   };
 
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    setDateOfFlight(date.toISOString().slice(0, 10));
+    hideDatePicker();
+  };
+
+  const handleSearchClick = () => {
+    // if () {
+		// 	return;
+		// }
+
+    fetch("http://localhost:3000/flights", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ flightNumber: flightNumber, date: formatedDate }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+        } else if (data.result === false) {
+        }
+      });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -44,22 +84,67 @@ export default function HomeScreen() {
       <View style={styles.searchContainer}>
         <View style={styles.dropShadow}>
           <View
-            style={[styles.fieldSet, isFocused.email && styles.focusedInput]}
+            style={[
+              styles.fieldSet,
+              isFocused.flightNumber && styles.focusedInput,
+            ]}
           >
             <Text style={styles.legend}>N° de vol</Text>
             <TextInput
               cursorColor={colors.light1}
               allowFontScaling={true}
-              keyboardType="email-address"
+              keyboardType="text"
               autoCapitalize="none"
+              placeholder="Saisissez votre N° de vol"
               style={styles.inputs}
-              onChangeText={(value) => setEmail(value)}
-              onFocus={() => handleFocus("email")}
-              onBlur={() => handleBlur("email")}
+              onChangeText={(value) => setNumberOfFlight(value)}
+              onFocus={() => handleFocus("flightNumber")}
+              onBlur={() => handleBlur("flightNumber")}
+              value={numberOfFlight}
             ></TextInput>
           </View>
         </View>
-        <TouchableOpacity style={styles.searchBtn}>
+        <View style={styles.dropShadow}>
+          <View
+            style={[
+              styles.fieldSet,
+              isFocused.flightDate && styles.focusedInput,
+            ]}
+          >
+            <Text style={styles.legend}>Date du vol</Text>
+            <View style={styles.calendarInputContainer}>
+              <TextInput
+                cursorColor={colors.light1}
+                allowFontScaling={true}
+                keyboardType="date"
+                autoCapitalize="none"
+                placeholder="AAAA-MM-DD"
+                style={styles.inputs}
+                onChangeText={(value) => setDateOfFlight(value)}
+                onFocus={() => handleFocus("flightDate")}
+                onBlur={() => handleBlur("flightDate")}
+                value={dateOfFlight}
+              ></TextInput>
+              <TouchableOpacity onPress={showDatePicker}>
+                <FontAwesome name="calendar" size={25} color={colors.dark1} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+        <View>
+          <DateTimePickerModal
+            // style={styles.calendarLayout}
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
+          />
+        </View>
+
+        <TouchableOpacity
+          onPress={() => handleSearchClick()}
+          style={styles.searchBtn}
+        >
           <Text style={styles.searchBtnText}>Rechercher</Text>
         </TouchableOpacity>
       </View>
@@ -128,6 +213,17 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 3,
   },
+  calendarInputContainer: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    marginLeft: 2,
+  },
+  // calendarLayout: {
+  //   backgroundColor: colors.dark1,
+  //   color: colors.dark1
+  // },
   searchBtn: {
     width: "80%",
     backgroundColor: colors.hot1,

@@ -28,7 +28,7 @@ export default function AccountScreen({ navigation }) {
   const [successMessagePassword, setSuccessMessagePassword] = useState("");
 
   const user = useSelector((state) => state.user.value);
-
+  console.log(user)
 	if (user.email === null){
 		navigation.navigate('Connexion')
 }
