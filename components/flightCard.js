@@ -21,4 +21,6 @@ function FlightCard(props) {
 	);
 }
 
+
+
 export default FlightCard;

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
 
 import {colors} from '../assets/colors'
 
-export default function SearchResultScreen() {
+export default function SearchResultScreen({navigation}) {
     return (
         <View style={styles.container}>
             <Text>SearchResultScreen</Text>
