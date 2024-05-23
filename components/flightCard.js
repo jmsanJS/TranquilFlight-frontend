@@ -1,9 +1,16 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { colors } from "../assets/colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import { useDispatch, useSelector } from "react-redux";
+import { addFavorite } from "../reducers/favoriteFlights";
 
 function FlightCard(props) {
+  const dispatch = useDispatch();
+
+  const handleFavoriteClick = () => {
+    dispatch(addFavorite());
+  };
   return (
     <View style={styles.favoriteTripContainer}>
       <View style={styles.favoriteTripHeader}>
@@ -13,13 +20,17 @@ function FlightCard(props) {
         </View>
         <Text style={styles.date}>19-06-2024</Text>
         <View style={styles.icons}>
-          <FontAwesome name="bell" size={25} color={colors.dark1} />
-          <FontAwesome
-            name="heart"
-            size={25}
-            color={colors.dark1}
-            style={styles.heartIcon}
-          />
+          <TouchableOpacity onPress={() => handleFavoriteClick()}>
+            <FontAwesome name="bell" size={25} color={colors.dark1} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleFavoriteClick()}>
+            <FontAwesome
+              name="heart"
+              size={25}
+              color={colors.dark1}
+              style={styles.heartIcon}
+            />
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.favoriteTripDescriptionContainer}>
