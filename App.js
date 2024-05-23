@@ -101,13 +101,15 @@ function FavoriteStackScreen() {
       })}
       >
       <FavoriteStack.Screen name="Mes favoris" component={FavoriteScreen} />
-      <SearchStack.Screen name="Suivi du vol" component={TrackingScreen}
-      />
+      <FavoriteStack.Screen name="Suivi du vol" component={TrackingScreen}/>
     </FavoriteStack.Navigator>
   );
 }
 
 export default function App() {
+
+  
+
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
