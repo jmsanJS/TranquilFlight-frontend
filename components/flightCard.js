@@ -8,9 +8,9 @@ import { removeFlight } from "../reducers/flightsResult";
 
 function FlightCard(props) {
   const user = useSelector((state) => state.user.value);
-  const flightsData = useSelector((state) => state.flightsResult.value);
+  const flightData = useSelector((state) => state.flightsResult.value)
+  
 
-  console.log(props)
   const dispatch = useDispatch();
 
   const handleNotificationClick = () => {
@@ -28,54 +28,57 @@ function FlightCard(props) {
     }
   };
 
-  return (
-    <View style={styles.favoriteTripContainer}>
-      <View style={styles.favoriteTripHeader}>
-        <View style={styles.flightNumberContainer}>
-          <Text style={styles.flightNumberText}></Text>
-          <Text style={styles.companyText}>{}</Text>
-        </View>
-        <Text style={styles.date}>{}</Text>
-        <View style={styles.icons}>
-          <TouchableOpacity onPress={() => handleNotificationClick()}>
-            <FontAwesome name="bell" size={25} color={colors.dark1} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => handleFavoriteClick()}>
-            <FontAwesome
-              name="heart"
-              size={25}
-              color={colors.dark1}
-              style={styles.heartIcon}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.favoriteTripDescriptionContainer}>
-        <View style={styles.departureInfo}>
-          <Text style={styles.departureTime}>{}</Text>
-          <Text style={styles.departureCity}>Paris</Text>
-          <Text style={styles.departureAirportCode}>ORY</Text>
-        </View>
-        <View style={styles.routeLineContainer}>
-          <Text style={styles.tripTime}>1h08</Text>
-          <View style={styles.routeLineAndTripTime}>
-            <View style={styles.routeLine}></View>
-            <FontAwesome5
-              name="plane"
-              size={13}
-              color={colors.dark1}
-              style={styles.planeIcon}
-            />
+  if (props.flightData.length > 0){
+    return (
+      <View style={styles.favoriteTripContainer}>
+        <View style={styles.favoriteTripHeader}>
+          <View style={styles.flightNumberContainer}>
+            <Text style={styles.flightNumberText}>{props.flightData[0][0].number}</Text>
+            <Text style={styles.companyText}>{}</Text>
+          </View>
+          <Text style={styles.date}>{}</Text>
+          <View style={styles.icons}>
+            <TouchableOpacity onPress={() => handleNotificationClick()}>
+              <FontAwesome name="bell" size={25} color={colors.dark1} />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => handleFavoriteClick()}>
+              <FontAwesome
+                name="heart"
+                size={25}
+                color={colors.dark1}
+                style={styles.heartIcon}
+              />
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={styles.arrivalInfo}>
-          <Text style={styles.arrivalTime}>16:04</Text>
-          <Text style={styles.arrivalCity}>Lyon</Text>
-          <Text style={styles.arrivalAirportCode}>LYS</Text>
+        <View style={styles.favoriteTripDescriptionContainer}>
+          <View style={styles.departureInfo}>
+            <Text style={styles.departureTime}>{}</Text>
+            <Text style={styles.departureCity}>Paris</Text>
+            <Text style={styles.departureAirportCode}>ORY</Text>
+          </View>
+          <View style={styles.routeLineContainer}>
+            <Text style={styles.tripTime}>1h08</Text>
+            <View style={styles.routeLineAndTripTime}>
+              <View style={styles.routeLine}></View>
+              <FontAwesome5
+                name="plane"
+                size={13}
+                color={colors.dark1}
+                style={styles.planeIcon}
+              />
+            </View>
+          </View>
+          <View style={styles.arrivalInfo}>
+            <Text style={styles.arrivalTime}>16:04</Text>
+            <Text style={styles.arrivalCity}>Lyon</Text>
+            <Text style={styles.arrivalAirportCode}>LYS</Text>
+          </View>
         </View>
       </View>
-    </View>
-  );
+    );
+  }
+  
 }
 
 const styles = StyleSheet.create({

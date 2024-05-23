@@ -13,9 +13,9 @@ import {
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addFlight } from "../reducers/flightsResult";
+import { addFlight, removeFlight } from "../reducers/flightsResult";
 
 import { colors } from "../assets/colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -26,8 +26,18 @@ import SearchBar from "../components/searchBar";
 
 export default function SearchResultScreen({ navigation }) {
 
+  const [flightCardData, setFlightCardData]=useState([])
+
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+  const flightData = useSelector((state) => state.flightsResult.value);
+
+  console.log('data----->',flightData.length)
+
+  if(flightData.length>0){
+    setFlightCardData(flightData)
+    dispatch(removeFlight());
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -42,7 +52,7 @@ export default function SearchResultScreen({ navigation }) {
       </View>
 
       <View style={styles.favoritesTripsContainer}>
-        <FlightCard />
+        <FlightCard flightData={flightCardData}/>
       </View>
     </SafeAreaView>
   );

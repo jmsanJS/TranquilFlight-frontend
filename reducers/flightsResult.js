@@ -9,7 +9,7 @@ export const flightsSlice = createSlice({
     initialState,
     reducers: {
         addFlight: (state, action) => {
-            state.value = action.payload;
+            state.value.push(action.payload);
         },
         removeFlight:(state) => {
             state.value = [];

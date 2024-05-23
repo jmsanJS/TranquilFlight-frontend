@@ -20,7 +20,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addFlight } from "../reducers/flightsResult";
+import { addFlight, removeFlight } from "../reducers/flightsResult";
 
 function SearchBar(props) {
 
@@ -65,9 +65,9 @@ function SearchBar(props) {
         fetch(`http://localhost:3000/flights/${numberOfFlight}/${dateOfFlight}`)
         .then((response) => response.json())
         .then((data) => {
-            console.log("test fetch front", data);
+            
             if (data.result) {
-            console.log("test fetch front dans le if", data);
+            dispatch(removeFlight());
             dispatch(addFlight(data.flightData));
             navigation.navigate("Résultats de recherche");
             } else if (data.result === false) {

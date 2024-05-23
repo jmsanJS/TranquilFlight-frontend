@@ -10,8 +10,9 @@ import SearchResultScreen from "./screens/SearchResultScreen";
 import SigninScreen from "./screens/SigninScreen";
 import SignupScreen from "./screens/SignupScreen";
 import SettingsScreen from "./screens/SettingsScreen";
-import MyFlightsScreen from "./screens/MyFlightsScreen";
+import FavoriteScreen from "./screens/FavoriteScreen";
 import AccountScreen from "./screens/AccountScreen";
+import TrackingScreen from "./screens/TrackingScreen";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
@@ -47,6 +48,7 @@ const Tab = createBottomTabNavigator();
 
 const AccountStack = createNativeStackNavigator();
 const SearchStack = createNativeStackNavigator();
+const FavoriteStack = createNativeStackNavigator();
 
 function AccountStackScreen() {
   return (
@@ -84,6 +86,24 @@ function SearchStackScreen() {
         component={HomeScreen}
       />
     </SearchStack.Navigator>
+  );
+}
+
+function FavoriteStackScreen() {
+  return (
+    <FavoriteStack.Navigator
+      screenOptions={({ route }) => ({
+        headerStyle: {
+          backgroundColor: colors.dark1,
+        },
+        headerTintColor: "white",
+        headerTitleAlign: "center",
+      })}
+      >
+      <FavoriteStack.Screen name="Mes favoris" component={FavoriteScreen} />
+      <SearchStack.Screen name="Suivi du vol" component={TrackingScreen}
+      />
+    </FavoriteStack.Navigator>
   );
 }
 
@@ -134,7 +154,7 @@ export default function App() {
               })}
             >
               <Tab.Screen name="Recherche" component={SearchStackScreen} />
-              <Tab.Screen name="Mes vols" component={MyFlightsScreen} />
+              <Tab.Screen name="Mes vols" component={FavoriteStackScreen} />
               <Tab.Screen name="Paramètres" component={SettingsScreen} />
 
               <Tab.Screen name="Compte" component={AccountStackScreen} />
