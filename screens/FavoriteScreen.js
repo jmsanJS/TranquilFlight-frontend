@@ -20,9 +20,11 @@ export default function MyFlightsScreen({navigation}) {
     const user = useSelector((state) => state.user.value);
     const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
 
+    console.log('fac',favoriteFlights)
+
     return (
         <View style={styles.container}>
-            <Text>MyFlightsScreen</Text>
+            <Text>{favoriteFlights[1][0][0].number}</Text>
         </View>
     );
 }

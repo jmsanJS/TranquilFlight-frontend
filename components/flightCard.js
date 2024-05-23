@@ -16,17 +16,9 @@ function FlightCard(props) {
 
 
   let date1 = moment(new Date(props.flightData[0][0].departure.scheduledTime.utc))
-  console.log('date1', date1)
   let date2 = moment(new Date(props.flightData[0][0].arrival.scheduledTime.utc))
-  console.log('date2', date2)
-
   let hours = date2.diff(date1, 'hours')
-  console.log('hours', hours)
   var mins = moment.utc(moment(date2, "HH:mm:ss").diff(moment(date1, "HH:mm:ss"))).format("mm")
-  console.log('minutes', mins)
-
-  console.log(`${hours}h${mins}`)
-  
 
   const dispatch = useDispatch();
 
@@ -35,11 +27,11 @@ function FlightCard(props) {
   };
 
   const handleFavoriteClick = () => {
-    
+    console.log(props.flightData)
     if (!user.token) {
-      dispatch(addFavorite(flightsData));
+      dispatch(addFavorite(props.flightData));
     } else if (user.token) {
-      dispatch(addFavorite(flightsData));
+      dispatch(addFavorite(props.flightData));
     }
   };
 
