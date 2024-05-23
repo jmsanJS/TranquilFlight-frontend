@@ -4,23 +4,40 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavorite } from "../reducers/favoriteFlights";
+import { removeFlight } from "../reducers/flightsResult";
 
 function FlightCard(props) {
+  const user = useSelector((state) => state.user.value);
+  const flightsData = useSelector((state) => state.flightsResult.value);
+
+  console.log(props)
   const dispatch = useDispatch();
 
-  const handleFavoriteClick = () => {
-    dispatch(addFavorite());
+  const handleNotificationClick = () => {
+    console.log("notification");
   };
+
+  const handleFavoriteClick = () => {
+    
+    if (!user.token) {
+      dispatch(addFavorite(flightsData));
+      console.log("click not connected user", flightsData);
+    } else if (user.token) {
+      dispatch(addFavorite(flightsData));
+      console.log("click of connected user", flightsData);
+    }
+  };
+
   return (
     <View style={styles.favoriteTripContainer}>
       <View style={styles.favoriteTripHeader}>
         <View style={styles.flightNumberContainer}>
-          <Text style={styles.flightNumberText}>N0301</Text>
-          <Text style={styles.companyText}>Air France</Text>
+          <Text style={styles.flightNumberText}></Text>
+          <Text style={styles.companyText}>{}</Text>
         </View>
-        <Text style={styles.date}>19-06-2024</Text>
+        <Text style={styles.date}>{}</Text>
         <View style={styles.icons}>
-          <TouchableOpacity onPress={() => handleFavoriteClick()}>
+          <TouchableOpacity onPress={() => handleNotificationClick()}>
             <FontAwesome name="bell" size={25} color={colors.dark1} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => handleFavoriteClick()}>
@@ -35,7 +52,7 @@ function FlightCard(props) {
       </View>
       <View style={styles.favoriteTripDescriptionContainer}>
         <View style={styles.departureInfo}>
-          <Text style={styles.departureTime}>14:56</Text>
+          <Text style={styles.departureTime}>{}</Text>
           <Text style={styles.departureCity}>Paris</Text>
           <Text style={styles.departureAirportCode}>ORY</Text>
         </View>
