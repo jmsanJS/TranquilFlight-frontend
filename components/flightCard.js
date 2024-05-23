@@ -6,9 +6,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { addFavorite } from "../reducers/favoriteFlights";
 import { removeFlight } from "../reducers/flightsResult";
 
+import moment from 'moment';
+
 function FlightCard(props) {
   const user = useSelector((state) => state.user.value);
   const flightData = useSelector((state) => state.flightsResult.value)
+
+  if (props.flightData.length > 0){
+
+
+  let date1 = moment(new Date(props.flightData[0][0].departure.scheduledTime.utc))
+  console.log('date1', date1)
+  let date2 = moment(new Date(props.flightData[0][0].arrival.scheduledTime.utc))
+  console.log('date2', date2)
+
+  let hours = date2.diff(date1, 'hours')
+  console.log('hours', hours)
+  var mins = moment.utc(moment(date2, "HH:mm:ss").diff(moment(date1, "HH:mm:ss"))).format("mm")
+  console.log('minutes', mins)
+
+  console.log(`${hours}h${mins}`)
   
 
   const dispatch = useDispatch();
@@ -21,14 +38,12 @@ function FlightCard(props) {
     
     if (!user.token) {
       dispatch(addFavorite(flightsData));
-      console.log("click not connected user", flightsData);
     } else if (user.token) {
       dispatch(addFavorite(flightsData));
-      console.log("click of connected user", flightsData);
     }
   };
 
-  if (props.flightData.length > 0){
+  
     return (
       <View style={styles.favoriteTripContainer}>
         <View style={styles.favoriteTripHeader}>
@@ -58,7 +73,7 @@ function FlightCard(props) {
             <Text style={styles.departureAirportCode}>{props.flightData[0][0].departure.airport.iata}</Text>
           </View>
           <View style={styles.routeLineContainer}>
-            <Text style={styles.tripTime}>1h08</Text>
+            <Text style={styles.tripTime}>{`${hours}h${mins}`}</Text>
             <View style={styles.routeLineAndTripTime}>
               <View style={styles.routeLine}></View>
               <FontAwesome5

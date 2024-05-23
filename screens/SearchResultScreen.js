@@ -24,6 +24,7 @@ import FontAwesome5 from "react-native-vector-icons/FontAwesome";
 import FlightCard from "../components/flightCard";
 import SearchBar from "../components/searchBar";
 
+
 export default function SearchResultScreen({ navigation }) {
 
   const [flightCardData, setFlightCardData]=useState([])
@@ -31,8 +32,6 @@ export default function SearchResultScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   const flightData = useSelector((state) => state.flightsResult.value);
-
-  console.log('data----->',flightData.length)
 
   if(flightData.length>0){
     setFlightCardData(flightData)
