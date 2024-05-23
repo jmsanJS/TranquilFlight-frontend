@@ -34,9 +34,9 @@ function FlightCard(props) {
         <View style={styles.favoriteTripHeader}>
           <View style={styles.flightNumberContainer}>
             <Text style={styles.flightNumberText}>{props.flightData[0][0].number}</Text>
-            <Text style={styles.companyText}>{}</Text>
+            <Text style={styles.companyText}>{props.flightData[0][0].airline.name}</Text>
           </View>
-          <Text style={styles.date}>{}</Text>
+          <Text style={styles.date}>{props.flightData[0][0].departure.scheduledTime.local.slice(0,10)}</Text>
           <View style={styles.icons}>
             <TouchableOpacity onPress={() => handleNotificationClick()}>
               <FontAwesome name="bell" size={25} color={colors.dark1} />
@@ -53,9 +53,9 @@ function FlightCard(props) {
         </View>
         <View style={styles.favoriteTripDescriptionContainer}>
           <View style={styles.departureInfo}>
-            <Text style={styles.departureTime}>{}</Text>
-            <Text style={styles.departureCity}>Paris</Text>
-            <Text style={styles.departureAirportCode}>ORY</Text>
+            <Text style={styles.departureTime}>{props.flightData[0][0].departure.scheduledTime.local.slice(11,16)}</Text>
+            <Text style={styles.departureCity}>{props.flightData[0][0].departure.airport.municipalityName}</Text>
+            <Text style={styles.departureAirportCode}>{props.flightData[0][0].departure.airport.iata}</Text>
           </View>
           <View style={styles.routeLineContainer}>
             <Text style={styles.tripTime}>1h08</Text>
@@ -70,9 +70,9 @@ function FlightCard(props) {
             </View>
           </View>
           <View style={styles.arrivalInfo}>
-            <Text style={styles.arrivalTime}>16:04</Text>
-            <Text style={styles.arrivalCity}>Lyon</Text>
-            <Text style={styles.arrivalAirportCode}>LYS</Text>
+            <Text style={styles.arrivalTime}>{props.flightData[0][0].arrival.scheduledTime.local.slice(11,16)}</Text>
+            <Text style={styles.arrivalCity}>{props.flightData[0][0].arrival.airport.municipalityName}</Text>
+            <Text style={styles.arrivalAirportCode}>{props.flightData[0][0].arrival.airport.iata}</Text>
           </View>
         </View>
       </View>
