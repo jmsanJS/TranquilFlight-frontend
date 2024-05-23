@@ -107,6 +107,9 @@ function FavoriteStackScreen() {
 }
 
 export default function App() {
+
+  
+
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>

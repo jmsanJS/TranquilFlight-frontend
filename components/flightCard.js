@@ -3,89 +3,128 @@ import { colors } from "../assets/colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useDispatch, useSelector } from "react-redux";
-import { addFavorite } from "../reducers/favoriteFlights";
-import { removeFlight } from "../reducers/flightsResult";
-
+import { addFavorite, removeFavorite } from "../reducers/favoriteFlights";
+import { useState, useEffect } from "react";
 import moment from 'moment';
 
 function FlightCard(props) {
   const user = useSelector((state) => state.user.value);
-  const flightData = useSelector((state) => state.flightsResult.value)
-
-  if (props.flightData.length > 0){
-
-
-  let date1 = moment(new Date(props.flightData[0][0].departure.scheduledTime.utc))
-  let date2 = moment(new Date(props.flightData[0][0].arrival.scheduledTime.utc))
-  let hours = date2.diff(date1, 'hours')
-  var mins = moment.utc(moment(date2, "HH:mm:ss").diff(moment(date1, "HH:mm:ss"))).format("mm")
+  const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
+  const [isFavorited, setIsFavorited] = useState(false);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (props.flightData && props.flightData.length > 0) {
+      const isFavorite = favoriteFlights.some(favorite => favorite[0][0].number === props.flightData[0][0].number);
+      setIsFavorited(isFavorite);
+    }
+  }, [favoriteFlights, props.flightData]);
+
+  // Fournir une valeur par défaut à props.flightData
+  const flightData = props.flightData || [];
+
+  if (flightData.length === 0) {
+    return null; // ou un indicateur de chargement
+  }
+
+  let date1 = moment(new Date(flightData[0][0].departure.scheduledTime.utc));
+  let date2 = moment(new Date(flightData[0][0].arrival.scheduledTime.utc));
+  let hours = date2.diff(date1, 'hours');
+  var mins = moment.utc(moment(date2, "HH:mm:ss").diff(moment(date1, "HH:mm:ss"))).format("mm");
 
   const handleNotificationClick = () => {
     console.log("notification");
   };
 
   const handleFavoriteClick = () => {
-    console.log(props.flightData)
-    if (!user.token) {
-      dispatch(addFavorite(props.flightData));
-    } else if (user.token) {
-      dispatch(addFavorite(props.flightData));
+    if(user.token){
+
+      if (!isFavorited) {
+        console.log('logged  favorite')
+        fetch(`http://localhost:3000/user/favorite`,{
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ flightNumber: flightData[0][0].number, flightData: flightData, email: user.email, token: user.token }),
+        })
+        .then((response) => response.json())
+        .then(dispatch(addFavorite(flightData)))
+  
+      } else {
+        console.log('logged not favorite')
+        fetch(`http://localhost:3000/user/favorite`,{
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ flightNumber: flightData[0][0].number, email: user.email, token: user.token }),
+        })
+        .then((response) => response.json())
+        .then(dispatch(removeFavorite(flightData[0][0].number)))
+      }
+
+    }else{
+      if (!isFavorited) {
+        console.log('not logged favorite')
+        dispatch(addFavorite(flightData))
+      } else {
+        console.log('not logged not favorite')
+        dispatch(removeFavorite(flightData[0][0].number))
+      }
     }
+
   };
 
-  
-    return (
-      <View style={styles.favoriteTripContainer}>
-        <View style={styles.favoriteTripHeader}>
-          <View style={styles.flightNumberContainer}>
-            <Text style={styles.flightNumberText}>{props.flightData[0][0].number}</Text>
-            <Text style={styles.companyText}>{props.flightData[0][0].airline.name}</Text>
-          </View>
-          <Text style={styles.date}>{props.flightData[0][0].departure.scheduledTime.local.slice(0,10)}</Text>
-          <View style={styles.icons}>
-            <TouchableOpacity onPress={() => handleNotificationClick()}>
-              <FontAwesome name="bell" size={25} color={colors.dark1} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleFavoriteClick()}>
-              <FontAwesome
-                name="heart"
-                size={25}
-                color={colors.dark1}
-                style={styles.heartIcon}
-              />
-            </TouchableOpacity>
-          </View>
+  let iconStyle = { color: 'grey', marginLeft: 10 };
+  if (isFavorited) {
+    iconStyle = { color: 'red', marginLeft: 10 };
+  }
+
+  return (
+    <View style={styles.favoriteTripContainer}>
+      <View style={styles.favoriteTripHeader}>
+        <View style={styles.flightNumberContainer}>
+          <Text style={styles.flightNumberText}>{flightData[0][0].number}</Text>
+          <Text style={styles.companyText}>{flightData[0][0].airline.name}</Text>
         </View>
-        <View style={styles.favoriteTripDescriptionContainer}>
-          <View style={styles.departureInfo}>
-            <Text style={styles.departureTime}>{props.flightData[0][0].departure.scheduledTime.local.slice(11,16)}</Text>
-            <Text style={styles.departureCity}>{props.flightData[0][0].departure.airport.municipalityName}</Text>
-            <Text style={styles.departureAirportCode}>{props.flightData[0][0].departure.airport.iata}</Text>
-          </View>
-          <View style={styles.routeLineContainer}>
-            <Text style={styles.tripTime}>{`${hours}h${mins}`}</Text>
-            <View style={styles.routeLineAndTripTime}>
-              <View style={styles.routeLine}></View>
-              <FontAwesome5
-                name="plane"
-                size={13}
-                color={colors.dark1}
-                style={styles.planeIcon}
-              />
-            </View>
-          </View>
-          <View style={styles.arrivalInfo}>
-            <Text style={styles.arrivalTime}>{props.flightData[0][0].arrival.scheduledTime.local.slice(11,16)}</Text>
-            <Text style={styles.arrivalCity}>{props.flightData[0][0].arrival.airport.municipalityName}</Text>
-            <Text style={styles.arrivalAirportCode}>{props.flightData[0][0].arrival.airport.iata}</Text>
-          </View>
+        <Text style={styles.date}>{flightData[0][0].departure.scheduledTime.local.slice(0, 10)}</Text>
+        <View style={styles.icons}>
+          <TouchableOpacity onPress={handleNotificationClick}>
+            <FontAwesome name="bell" size={25} color={colors.dark1} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleFavoriteClick}>
+            <FontAwesome
+              name="heart"
+              size={25}
+              style={iconStyle}
+            />
+          </TouchableOpacity>
         </View>
       </View>
-    );
-  }
-  
+      <View style={styles.favoriteTripDescriptionContainer}>
+        <View style={styles.departureInfo}>
+          <Text style={styles.departureTime}>{flightData[0][0].departure.scheduledTime.local.slice(11, 16)}</Text>
+          <Text style={styles.departureCity}>{flightData[0][0].departure.airport.municipalityName}</Text>
+          <Text style={styles.departureAirportCode}>{flightData[0][0].departure.airport.iata}</Text>
+        </View>
+        <View style={styles.routeLineContainer}>
+          <Text style={styles.tripTime}>{`${hours}h${mins}`}</Text>
+          <View style={styles.routeLineAndTripTime}>
+            <View style={styles.routeLine}></View>
+            <FontAwesome5
+              name="plane"
+              size={13}
+              color={colors.dark1}
+              style={styles.planeIcon}
+            />
+          </View>
+        </View>
+        <View style={styles.arrivalInfo}>
+          <Text style={styles.arrivalTime}>{flightData[0][0].arrival.scheduledTime.local.slice(11, 16)}</Text>
+          <Text style={styles.arrivalCity}>{flightData[0][0].arrival.airport.municipalityName}</Text>
+          <Text style={styles.arrivalAirportCode}>{flightData[0][0].arrival.airport.iata}</Text>
+        </View>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -120,7 +159,6 @@ const styles = StyleSheet.create({
     color: colors.dark1,
     fontSize: 13,
     fontWeight: "600",
-    width: "33.33%",
     textAlign: "center",
   },
   icons: {

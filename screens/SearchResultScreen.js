@@ -34,12 +34,16 @@ export default function SearchResultScreen({ navigation }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   const flightData = useSelector((state) => state.flightsResult.value);
+  const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
   //dispatch(emptyReducer())
 
   if(flightData.length>0){
-    setFlightCardData(flightData)
+    setFlightCardData(flightData) 
     dispatch(removeFlight());
   }
+
+  //const isFavorite =false
+  
 
   return (
     <SafeAreaView style={styles.container}>
