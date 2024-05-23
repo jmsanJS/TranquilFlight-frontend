@@ -100,9 +100,8 @@ function FavoriteStackScreen() {
         headerTitleAlign: "center",
       })}
       >
+      <FavoriteStack.Screen name="Suivi du vol" component={TrackingScreen}/>
       <FavoriteStack.Screen name="Mes favoris" component={FavoriteScreen} />
-      <SearchStack.Screen name="Suivi du vol" component={TrackingScreen}
-      />
     </FavoriteStack.Navigator>
   );
 }
