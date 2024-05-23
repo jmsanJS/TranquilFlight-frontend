@@ -19,6 +19,7 @@ import { addFlight } from "../reducers/flightsResult";
 
 import { colors } from "../assets/colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome";
 
 import SearchBar from "../components/searchBar";
 
