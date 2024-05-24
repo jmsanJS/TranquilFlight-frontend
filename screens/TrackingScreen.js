@@ -44,7 +44,7 @@ export default function TrackingScreen({ navigation }) {
     const fetchWeatherData = async () => {
       try {
         const weatherDataResponse = await fetch(
-          `http://localhost:3000/weather/Lyon`
+          `${backendURL}/weather/Lyon`
         );
         if (!weatherDataResponse.ok) {
           throw new Error(`HTTP error! Status: ${weatherDataResponse.status}`);
