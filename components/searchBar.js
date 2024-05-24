@@ -14,6 +14,8 @@ import {
 import { useNavigation } from '@react-navigation/native';
 
 import { colors } from "../assets/colors";
+import {backendURL} from '../assets/URLs'
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -62,7 +64,7 @@ function SearchBar(props) {
 
     const handleSearchClick = () => {
         setErrorMessage("");
-        fetch(`http://localhost:3000/flights/${numberOfFlight}/${dateOfFlight}`)
+        fetch(`${backendURL}/flights/${numberOfFlight}/${dateOfFlight}`)
         .then((response) => response.json())
         .then((data) => {
             

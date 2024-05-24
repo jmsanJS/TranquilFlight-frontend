@@ -11,6 +11,7 @@ import {
 import { useState } from "react";
 
 import { colors } from "../assets/colors";
+import {backendURL} from '../assets/URLs'
 
 import * as Crypto from "expo-crypto";
 
@@ -45,7 +46,7 @@ export default function SigninScreen({ navigation }) {
             Crypto.CryptoDigestAlgorithm.SHA256, password
         )
         console.log(hashedPassword)
-    fetch('http://localhost:3000/user/signin', {
+    fetch(`${backendURL}/user/signin`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: email, password: hashedPassword }),

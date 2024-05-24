@@ -11,6 +11,7 @@ import {
 import { useState, useEffect } from "react";
 
 import { colors } from "../assets/colors";
+import {backendURL} from '../assets/URLs'
 
 import { useDispatch, useSelector } from "react-redux";
 import { addFavorite, emptyReducer, removeFavorite } from "../reducers/favoriteFlights";
@@ -26,7 +27,7 @@ export default function MyFlightsScreen({navigation}) {
     useEffect(() => {
     if(user.token){
 
-        fetch(`http://localhost:3000/user/favorites`,{
+        fetch(`${backendURL}/user/favorites`,{
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: user.email, token: user.token }),

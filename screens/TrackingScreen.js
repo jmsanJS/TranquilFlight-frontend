@@ -9,6 +9,8 @@ import {
 } from "react-native";
 
 import { colors } from "../assets/colors";
+import {backendURL} from '../assets/URLs'
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
