@@ -20,6 +20,7 @@ import { emptyReducer } from '../reducers/favoriteFlights';
 
 
 import { colors } from "../assets/colors";
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome";
 

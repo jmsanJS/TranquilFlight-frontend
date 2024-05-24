@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Platform, StatusBar } from 'react-native';
 import CustomSwitch from '../components/CustomSwitch';
 
 import {colors} from '../assets/colors'
+import {backendURL} from '../assets/URLs'
 
 export default function SettingsScreen() {
 

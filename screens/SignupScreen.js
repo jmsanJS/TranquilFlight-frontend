@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useSelector } from 'react-redux';
 
 import { colors } from '../assets/colors'
+import {backendURL} from '../assets/URLs'
 
 import * as Crypto from 'expo-crypto';
 
@@ -41,7 +42,7 @@ export default function SignupScreen({navigation}) {
             Crypto.CryptoDigestAlgorithm.SHA256, password
         )
         console.log(hashedPassword)
-        fetch('http://localhost:3000/user/signup', {
+        fetch(`${backendURL}/user/signup`, {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ email: email, password: hashedPassword, firstname:firstname, lastname:lastname }),

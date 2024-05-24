@@ -11,6 +11,7 @@ import {
 import { useState, useEffect } from "react";
 
 import { colors } from "../assets/colors";
+import {backendURL} from '../assets/URLs'
 
 import * as Crypto from "expo-crypto";
 
@@ -48,7 +49,7 @@ export default function AccountScreen({ navigation }) {
       return;
     }
 
-		fetch("http://localhost:3000/user/profile-update", {
+		fetch(`${backendURL}/user/profile-update`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -103,7 +104,7 @@ export default function AccountScreen({ navigation }) {
 
     console.log(hashedOldPassword, hashedNewPassword, user.email);
 
-    fetch("http://localhost:3000/user", {
+    fetch(`${backendURL}/user`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -129,7 +130,7 @@ export default function AccountScreen({ navigation }) {
   };
 
 	const handleDeleteAccount = () => {
-		fetch("http://localhost:3000/user", {
+		fetch(`${backendURL}/user`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -192,12 +193,12 @@ export default function AccountScreen({ navigation }) {
             ></TextInput>
           </View>
         </View>
-        <View style={styles.errorMessageContainer}>
+        {errorMessageMail ? <View style={styles.errorMessageContainer}>
           <Text style={styles.errorMessage}>{errorMessageMail}</Text>
-        </View>
-				<View style={styles.successMessageContainer}>
+        </View> : null}
+        {successMessageMail ? <View style={styles.successMessageContainer}>
           <Text style={styles.successMessage}>{successMessageMail}</Text>
-        </View>
+        </View> : null}
         <TouchableOpacity
           style={styles.validButton}
           onPress={() => handleChangeEmail()}
@@ -249,12 +250,12 @@ export default function AccountScreen({ navigation }) {
             ></TextInput>
           </View>
         </View>
-        <View style={styles.errorMessageContainer}>
+        {errorMessagePassword ? <View style={styles.errorMessageContainer}>
           <Text style={styles.errorMessage}>{errorMessagePassword}</Text>
-        </View>
-        <View style={styles.successMessageContainer}>
+        </View> : null}
+        {successMessagePassword ? <View style={styles.successMessageContainer}>
           <Text style={styles.successMessage}>{successMessagePassword}</Text>
-        </View>
+        </View> : null}
         <TouchableOpacity
           style={styles.validButton}
           onPress={() => handleChangePassword()}
@@ -310,7 +311,7 @@ const styles = StyleSheet.create({
   },
   fieldContainer: {
     width: "80%",
-    marginBottom: 20,
+    marginBottom: 15,
     borderRadius: 5,
   },
   fieldSet: {

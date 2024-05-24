@@ -1,5 +1,8 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+
 import { colors } from "../assets/colors";
+import {backendURL} from '../assets/URLs'
+
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,7 +44,7 @@ function FlightCard(props) {
     if(user.token){
 
       if (!isFavorited) {
-        fetch(`http://localhost:3000/user/favorite`,{
+        fetch(`${backendURL}/user/favorite`,{
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ flightNumber: flightData[0][0].number, flightData: flightData, email: user.email, token: user.token }),
@@ -50,7 +53,7 @@ function FlightCard(props) {
         .then(dispatch(addFavorite(flightData)))
   
       } else {
-        fetch(`http://localhost:3000/user/favorite`,{
+        fetch(`${backendURL}/user/favorite`,{
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ flightNumber: flightData[0][0].number, email: user.email, token: user.token }),
