@@ -50,6 +50,7 @@ const Tab = createBottomTabNavigator();
 const AccountStack = createNativeStackNavigator();
 const SearchStack = createNativeStackNavigator();
 const FavoriteStack = createNativeStackNavigator();
+const SettingsStack = createNativeStackNavigator();
 
 function AccountStackScreen() {
 
@@ -109,6 +110,23 @@ function FavoriteStackScreen() {
   );
 }
 
+function SettingsStackScreen() {
+  return (
+    <SettingsStack.Navigator
+      screenOptions={({ route }) => ({
+        headerStyle: {
+          backgroundColor: colors.dark1,
+        },
+        headerTintColor: "white",
+        headerTitleAlign: "center",
+      })}
+      >
+        <SettingsStack.Screen name="Paramètres utilisateur" component={SettingsScreen} />
+      
+    </SettingsStack.Navigator>
+  );
+}
+
 export default function App() {
 
   return (
@@ -158,8 +176,7 @@ export default function App() {
             >
               <Tab.Screen name="Recherche" component={SearchStackScreen} />
               <Tab.Screen name="Mes vols" component={FavoriteStackScreen} />
-              <Tab.Screen name="Paramètres" component={SettingsScreen} />
-
+              <Tab.Screen name="Paramètres" component={SettingsStackScreen} />
               <Tab.Screen name="Compte" component={AccountStackScreen} />
             </Tab.Navigator>
           </NavigationContainer>
