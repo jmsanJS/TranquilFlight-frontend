@@ -28,6 +28,7 @@ import favoriteFlights from './reducers/favoriteFlights';
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch, useSelector } from "react-redux";
 
 const reducers = combineReducers({ user, flightsResult, favoriteFlights });
 const persistConfig = {
@@ -51,6 +52,7 @@ const SearchStack = createNativeStackNavigator();
 const FavoriteStack = createNativeStackNavigator();
 
 function AccountStackScreen() {
+
   return (
     <AccountStack.Navigator
       screenOptions={({ route }) => ({
@@ -100,15 +102,14 @@ function FavoriteStackScreen() {
         headerTitleAlign: "center",
       })}
       >
+        <FavoriteStack.Screen name="Mes favoris" component={FavoriteScreen} />
       <FavoriteStack.Screen name="Suivi du vol" component={TrackingScreen}/>
-      <FavoriteStack.Screen name="Mes favoris" component={FavoriteScreen} />
+      
     </FavoriteStack.Navigator>
   );
 }
 
 export default function App() {
-
-  
 
   return (
     <Provider store={store}>

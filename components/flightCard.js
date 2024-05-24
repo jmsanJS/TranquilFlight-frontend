@@ -41,7 +41,6 @@ function FlightCard(props) {
     if(user.token){
 
       if (!isFavorited) {
-        console.log('logged  favorite')
         fetch(`http://localhost:3000/user/favorite`,{
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -51,26 +50,25 @@ function FlightCard(props) {
         .then(dispatch(addFavorite(flightData)))
   
       } else {
-        console.log('logged not favorite')
         fetch(`http://localhost:3000/user/favorite`,{
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ flightNumber: flightData[0][0].number, email: user.email, token: user.token }),
         })
         .then((response) => response.json())
-        .then(dispatch(removeFavorite(flightData[0][0].number)))
+        .then(()=>{
+          console.log('delete',flightData[0][0].number)
+          dispatch(removeFavorite(flightData[0][0].number))
+        })
       }
 
     }else{
       if (!isFavorited) {
-        console.log('not logged favorite')
         dispatch(addFavorite(flightData))
       } else {
-        console.log('not logged not favorite')
         dispatch(removeFavorite(flightData[0][0].number))
       }
     }
-
   };
 
   let iconStyle = { color: 'grey', marginLeft: 10 };

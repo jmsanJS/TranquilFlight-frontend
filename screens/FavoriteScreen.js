@@ -8,12 +8,12 @@ import {
     TextInput,
     KeyboardAvoidingView,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { colors } from "../assets/colors";
 
 import { useDispatch, useSelector } from "react-redux";
-import { addFavorite, removeFavorite } from "../reducers/favoriteFlights";
+import { addFavorite, emptyReducer, removeFavorite } from "../reducers/favoriteFlights";
 import FlightCard from "../components/flightCard";
 
 export default function MyFlightsScreen({navigation}) {
@@ -21,15 +21,37 @@ export default function MyFlightsScreen({navigation}) {
     const user = useSelector((state) => state.user.value);
     const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
 
-    //console.log('fac',favoriteFlights[1][0][0].number)
+    const dispatch = useDispatch();
 
+    useEffect(() => {
+    if(user.token){
+
+        fetch(`http://localhost:3000/user/favorites`,{
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: user.email, token: user.token }),
+            })
+            .then((response) => response.json())
+            .then(data => {
+                if (data.favorites){
+                    dispatch(emptyReducer())
+                    for (let favorite of data.favorites){
+                        console.log(favorite)
+                        dispatch(addFavorite(favorite.flightData))
+                    }
+                }
+                console.log(favoriteFlights)
+            })     
+    }
+    }, []);
+    console.log(favoriteFlights)
     return (
         
         <View style={styles.container}>
             <Text style={styles.title}>Mes vols favoris</Text>
             {favoriteFlights.length>0 ?
             favoriteFlights.map( (item, i) => {
-                return <FlightCard key={i} flightData={item}></FlightCard>
+                return <FlightCard key={i} flightData={item} ></FlightCard>
             }) : <Text style={styles.noFavoriteText}>Vous n'avez pas de vols suvegardés</Text>}
         </View>
     );
