@@ -83,11 +83,7 @@ function SearchStackScreen() {
       })}
       >
       <SearchStack.Screen name="Résultats de recherche" component={SearchResultScreen} />
-      <SearchStack.Screen
-        options={{ headerShown: false }}
-        name="Home"
-        component={HomeScreen}
-      />
+      <SearchStack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
     </SearchStack.Navigator>
   );
 }
@@ -103,8 +99,8 @@ function FavoriteStackScreen() {
         headerTitleAlign: "center",
       })}
       >
-        <FavoriteStack.Screen name="Mes favoris" component={FavoriteScreen} />
       <FavoriteStack.Screen name="Suivi du vol" component={TrackingScreen}/>
+      <FavoriteStack.Screen name="Mes favoris" component={FavoriteScreen} />
       
     </FavoriteStack.Navigator>
   );

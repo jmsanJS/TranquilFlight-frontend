@@ -9,54 +9,26 @@ import {
 } from "react-native";
 
 import { colors } from "../assets/colors";
-import {backendURL} from '../assets/URLs'
+import { backendURL } from "../assets/URLs";
+import weatherIcons from "../assets/weatherIcons";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import moment from "moment";
+import "moment/locale/fr";
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavorite, removeFavorite } from "../reducers/favoriteFlights";
 import flightsResult from "../reducers/flightsResult";
+import WeatherCard from "../components/WeatherCard";
 
 export default function TrackingScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
-  const [weatherData, setWeatherData] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchWeatherData = async () => {
-  //   const weatherDataResponse = await fetch(`http://localhost:3000/weather/Lyon`);
-
-  //   if (!weatherDataResponse.ok) {
-  //     throw new Error(`HTTP error! Status: ${response.status}`);
-  //   }
-
-  //   const data = await weatherDataResponse.json();
-  //   setWeatherData(data);
-  // }
-  // fetchWeatherData();
-  // }, []);
-
-  useEffect(() => {
-    const fetchWeatherData = async () => {
-      try {
-        const weatherDataResponse = await fetch(
-          `${backendURL}/weather/Lyon`
-        );
-        if (!weatherDataResponse.ok) {
-          throw new Error(`HTTP error! Status: ${weatherDataResponse.status}`);
-        }
-        const data = await weatherDataResponse.json();
-        setWeatherData(data.weatherData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchWeatherData();
-  }, []);
   return (
     <View style={styles.container}>
       <View style={styles.flightDescription}>
@@ -80,9 +52,7 @@ export default function TrackingScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-
         <Text style={styles.flightStatusTitle}>Flight Status</Text>
-
         <View style={styles.flightStatusContainer}>
           <View style={styles.routeLineContainer}>
             <FontAwesome6 name="location-dot" style={styles.locationDots} />
@@ -151,120 +121,9 @@ export default function TrackingScreen({ navigation }) {
           </View>
         </View>
       </View>
-      <View style={styles.weatherContainer}>
-        <View style={styles.weatherHeaderContainer}>
-          <View style={styles.weatherHeaderLeftContainer}>
-            <View style={styles.timeMiscInfoLeftContainer}>
-              <FontAwesome6 name="droplet" style={styles.weatherIcons} />
-              <Text style={styles.specificWeatherInfo}>67%</Text>
-            </View>
-            <View style={styles.timeMiscInfoLeftContainer}>
-              <MaterialCommunityIcons
-                name="weather-windy"
-                style={styles.weatherIcons}
-              />
-              <Text style={styles.specificWeatherInfo}>24 km/h</Text>
-            </View>
-          </View>
-          <View style={styles.weatherHeaderCenterContainer}>
-            <MaterialCommunityIcons
-              name="weather-sunny"
-              size={40}
-              style={{ textAlign: "center" }}
-            />
-            {weatherData &&
-              weatherData.daily &&
-              weatherData.daily.data &&
-              weatherData.daily.data[0] && (
-                <Text style={styles.actualTemperature}>
-                  {weatherData.daily.data[0].all_day.temperature}°C
-                </Text>
-              )}
-            {/* <Text style={styles.actualTemperature}>{weatherData.weatherData.daily.data[0].all_day.temperature}°C</Text> */}
-          </View>
-          <View style={styles.weatherHeaderRightContainer}>
-            <Text style={styles.actualDate}>Dim, 25 mai 2024</Text>
-            <View>
-              <View style={styles.timeMiscInfoRightContainer}>
-                <MaterialCommunityIcons
-                  name="weather-sunset-up"
-                  style={styles.weatherIcons}
-                />
-                <Text style={styles.specificWeatherInfo}>06:18</Text>
-              </View>
-              <View style={styles.timeMiscInfoRightContainer}>
-                <MaterialCommunityIcons
-                  name="weather-sunset-down"
-                  style={styles.weatherIcons}
-                />
-                <Text style={styles.specificWeatherInfo}>21:08</Text>
-              </View>
-            </View>
-          </View>
-        </View>
-        <View style={styles.weekWeatherContainer}>
-          <View style={styles.dayContainer}>
-            <Text style={styles.dayName}>LUN</Text>
-            <MaterialCommunityIcons
-              name="weather-sunny"
-              style={styles.weatherIcons}
-            />
-            <Text style={styles.dayTemperature}>23°C</Text>
-            <Text style={styles.dayMiscInfo}>0mm</Text>
-            <Text style={styles.dayMiscInfo}>57%</Text>
-          </View>
-          <View style={styles.dayContainer}>
-            <Text style={styles.dayName}>MAR</Text>
-            <MaterialCommunityIcons
-              name="weather-sunny"
-              style={styles.weatherIcons}
-            />
-            <Text style={styles.dayTemperature}>23°C</Text>
-            <Text style={styles.dayMiscInfo}>0mm</Text>
-            <Text style={styles.dayMiscInfo}>57%</Text>
-          </View>
-          <View style={styles.dayContainer}>
-            <Text style={styles.dayName}>MER</Text>
-            <MaterialCommunityIcons
-              name="weather-sunny"
-              style={styles.weatherIcons}
-            />
-            <Text style={styles.dayTemperature}>23°C</Text>
-            <Text style={styles.dayMiscInfo}>0mm</Text>
-            <Text style={styles.dayMiscInfo}>57%</Text>
-          </View>
-          <View style={styles.dayContainer}>
-            <Text style={styles.dayName}>JEU</Text>
-            <MaterialCommunityIcons
-              name="weather-sunny"
-              style={styles.weatherIcons}
-            />
-            <Text style={styles.dayTemperature}>23°C</Text>
-            <Text style={styles.dayMiscInfo}>0mm</Text>
-            <Text style={styles.dayMiscInfo}>57%</Text>
-          </View>
-          <View style={styles.dayContainer}>
-            <Text style={styles.dayName}>VEN</Text>
-            <MaterialCommunityIcons
-              name="weather-sunny"
-              style={styles.weatherIcons}
-            />
-            <Text style={styles.dayTemperature}>23°C</Text>
-            <Text style={styles.dayMiscInfo}>0mm</Text>
-            <Text style={styles.dayMiscInfo}>57%</Text>
-          </View>
-          <View style={styles.dayContainer}>
-            <Text style={styles.dayName}>SAM</Text>
-            <MaterialCommunityIcons
-              name="weather-sunny"
-              style={styles.weatherIcons}
-            />
-            <Text style={styles.dayTemperature}>23°C</Text>
-            <Text style={styles.dayMiscInfo}>0mm</Text>
-            <Text style={styles.dayMiscInfo}>57%</Text>
-          </View>
-        </View>
-      </View>
+
+      <WeatherCard />
+
     </View>
   );
 }
@@ -276,6 +135,10 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: colors.lightGrey,
     flex: 1,
+  },
+  flightDescription: {
+    flex: 6,
+    width: "100%",
   },
   flightHeader: {
     flexDirection: "row",
@@ -433,97 +296,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     width: "50%",
     textAlign: "center",
-  },
-  weatherContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 10,
-    borderRadius: 5,
-    backgroundColor: "white",
-    padding: 10,
-    width: "100%",
-    elevation: 3,
-  },
-  weatherHeaderContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    height: 70,
-  },
-  weatherHeaderLeftContainer: {
-    width: "33.33%",
-    height: "100%",
-    justifyContent: "flex-end",
-  },
-  weatherHeaderCenterContainer: {
-    width: "33.33%",
-    justifyContent: "space-between",
-    height: "100%",
-  },
-  weatherHeaderRightContainer: {
-    width: "33.33%",
-    height: "100%",
-    justifyContent: "space-between",
-  },
-  actualTemperature: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: colors.dark1,
-    textAlign: "center",
-  },
-  actualDate: {
-    fontSize: 10,
-    fontWeight: "600",
-    color: colors.dark1,
-    textAlign: "right",
-  },
-  timeMiscInfoLeftContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  timeMiscInfoRightContainer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "center",
-  },
-  weatherIcons: {
-    fontSize: 16,
-    color: colors.dark1,
-  },
-  specificWeatherInfo: {
-    color: colors.light1,
-    fontSize: 12,
-    fontWeight: "600",
-    textAlign: "center",
-    marginLeft: 5,
-  },
-  weekWeatherContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    marginTop: 10,
-  },
-  dayContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    // borderRightWidth: 1,
-    // borderRightColor: colors.hot1,
-    width: "14.28%",
-  },
-  dayName: {
-    color: colors.dark1,
-    fontWeight: "600",
-  },
-  dayTemperature: {
-    color: colors.light1,
-    fontWeight: "600",
-    fontSize: 12,
-  },
-  dayMiscInfo: {
-    color: colors.light1,
-    fontSize: 10,
-    fontWeight: "600",
   },
 });
