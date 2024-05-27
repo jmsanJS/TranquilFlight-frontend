@@ -7,12 +7,18 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavorite, removeFavorite } from "../reducers/favoriteFlights";
+import { addFlight, emptyFlight } from "../reducers/flightDataTracking";
 import { useState, useEffect } from "react";
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 
 function FlightCard(props) {
+
+  const navigation = useNavigation();
+
   const user = useSelector((state) => state.user.value);
   const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
+
   const [isFavorited, setIsFavorited] = useState(false);
 
   const dispatch = useDispatch();
@@ -79,8 +85,14 @@ function FlightCard(props) {
     iconStyle = { color: 'red', marginLeft: 10 };
   }
 
+  const handleFlightCardClick = async () => {
+    dispatch(emptyFlight())
+    dispatch(addFlight(props.flightData))
+    navigation.navigate('Suivi du vol')
+  }
+
   return (
-    <View style={styles.favoriteTripContainer}>
+    <TouchableOpacity onPress={()=>handleFlightCardClick()} style={styles.favoriteTripContainer}>
       <View style={styles.favoriteTripHeader}>
         <View style={styles.flightNumberContainer}>
           <Text style={styles.flightNumberText}>{flightData[0][0].number}</Text>
@@ -124,17 +136,18 @@ function FlightCard(props) {
           <Text style={styles.arrivalAirportCode}>{flightData[0][0].arrival.airport.iata}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   favoriteTripContainer: {
     backgroundColor: "white",
-    width: "80%",
+    width: "100%",
     marginBottom: 10,
     padding: 10,
     borderRadius: 5,
+    elevation:3,
   },
   favoriteTripHeader: {
     flexDirection: "row",

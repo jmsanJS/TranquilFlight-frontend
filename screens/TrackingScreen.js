@@ -28,6 +28,15 @@ import WeatherCard from "../components/WeatherCard";
 export default function TrackingScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
+  const flightDataTracking = useSelector((state) => state.flightDataTracking.value);
+
+  console.log(flightDataTracking[0][0].number)
+
+  const {
+    number,
+  } = flightDataTracking[0][0];
+
+  console.log(number)
 
   return (
     <View style={styles.container}>
@@ -121,8 +130,9 @@ export default function TrackingScreen({ navigation }) {
           </View>
         </View>
       </View>
-
-      <WeatherCard />
+      <View  style={styles.weatherCardContainer}>
+        <WeatherCard />
+      </View>
 
     </View>
   );
@@ -139,6 +149,8 @@ const styles = StyleSheet.create({
   flightDescription: {
     flex: 6,
     width: "100%",
+    flexDirection:'column',
+    justifyContent:'space-evenly'
   },
   flightHeader: {
     flexDirection: "row",
@@ -297,4 +309,7 @@ const styles = StyleSheet.create({
     width: "50%",
     textAlign: "center",
   },
+  weatherCardContainer:{
+    flex:3,
+  }
 });

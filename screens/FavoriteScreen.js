@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
         //justifyContent:'center',
         alignItems:'center',
         backgroundColor:colors.lightGrey,
+        padding:10,
     },
     title:{
         textDecorationLine:'underline',

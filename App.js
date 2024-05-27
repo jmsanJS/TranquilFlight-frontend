@@ -23,6 +23,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import user from './reducers/user';
 import flightsResult from './reducers/flightsResult';
 import favoriteFlights from './reducers/favoriteFlights';
+import flightDataTracking from './reducers/flightDataTracking';
 
 // redux-persist imports
 import { persistStore, persistReducer } from "redux-persist";
@@ -30,7 +31,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 
-const reducers = combineReducers({ user, flightsResult, favoriteFlights });
+const reducers = combineReducers({ user, flightsResult, favoriteFlights, flightDataTracking });
 const persistConfig = {
   key: "TranquilFlight",
   storage: AsyncStorage,
@@ -99,8 +100,8 @@ function FavoriteStackScreen() {
         headerTitleAlign: "center",
       })}
       >
-      <FavoriteStack.Screen name="Suivi du vol" component={TrackingScreen}/>
       <FavoriteStack.Screen name="Mes favoris" component={FavoriteScreen} />
+      <FavoriteStack.Screen name="Suivi du vol" component={TrackingScreen}/>
       
     </FavoriteStack.Navigator>
   );
