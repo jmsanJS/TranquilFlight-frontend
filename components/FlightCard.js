@@ -87,7 +87,7 @@ function FlightCard(props) {
 
   const handleFlightCardClick = async () => {
     dispatch(emptyFlight())
-    dispatch(addFlight(props.flightData))
+    dispatch(addFlight({flightNumber:flightData[0][0].number , date:flightData[0][0].departure.scheduledTime.local.slice(0,10)}))
     navigation.navigate('Suivi du vol')
   }
 
