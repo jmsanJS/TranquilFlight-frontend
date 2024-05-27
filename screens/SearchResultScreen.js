@@ -24,8 +24,8 @@ import { colors } from "../assets/colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome";
 
-import FlightCard from "../components/flightCard";
-import SearchBar from "../components/searchBar";
+import FlightCard from "../components/FlightCard";
+import SearchBar from "../components/SearchBar";
 
 
 export default function SearchResultScreen({ navigation }) {

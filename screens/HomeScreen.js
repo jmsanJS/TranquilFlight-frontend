@@ -20,7 +20,7 @@ import { addFlight } from "../reducers/flightsResult";
 import { colors } from "../assets/colors";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import SearchBar from "../components/searchBar";
+import SearchBar from "../components/SearchBar";
 
 export default function HomeScreen({ navigation }) {
 

@@ -15,7 +15,7 @@ import {backendURL} from '../assets/URLs'
 
 import { useDispatch, useSelector } from "react-redux";
 import { addFavorite, emptyReducer, removeFavorite } from "../reducers/favoriteFlights";
-import FlightCard from "../components/flightCard";
+import FlightCard from "../components/FlightCard";
 
 export default function MyFlightsScreen({navigation}) {
 
