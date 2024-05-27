@@ -28,6 +28,7 @@ import FlightCard from "../components/FlightCard";
 import SearchBar from "../components/SearchBar";
 
 
+
 export default function SearchResultScreen({ navigation }) {
 
   const [flightCardData, setFlightCardData]=useState([])
