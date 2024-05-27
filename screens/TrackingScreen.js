@@ -53,77 +53,78 @@ export default function TrackingScreen({ navigation }) {
           </View>
         </View>
         <Text style={styles.flightStatusTitle}>Flight Status</Text>
-        <View style={styles.flightStatusContainer}>
-          <View style={styles.routeLineContainer}>
-            <FontAwesome6 name="location-dot" style={styles.locationDots} />
-            <View style={styles.routeLineAndPlane}>
-              <View style={styles.routeLine}></View>
-              {/* <FontAwesome5
+        <View style={styles.routeLineContainer}>
+          <FontAwesome6 name="location-dot" style={styles.locationDots} />
+          <View style={styles.routeLineAndPlane}>
+            <View style={styles.routeLine}></View>
+            {/* <FontAwesome5
                 name="plane"
                 size={20}
                 color={colors.dark1}
                 style={styles.planeIcon}
               /> */}
-            </View>
-            <FontAwesome6 name="location-dot" style={styles.locationDots} />
           </View>
-          <View style={styles.flightInfoInDirect}>
-            <View style={styles.departureInfo}>
-              <Text style={styles.sinceDeparture}>Depuis départ</Text>
-              <Text style={styles.distanceAndTimeDepartureInfo}>
-                147 km en 0h32
-              </Text>
-            </View>
-            <View style={styles.arrivalInfo}>
-              <Text style={styles.untilArrival}>Jusqu'à l'arrivée</Text>
-              <Text style={styles.distanceAndTimeArrivalInfo}>
-                258 km en 1h24
-              </Text>
-            </View>
+          <FontAwesome6 name="location-dot" style={styles.locationDots} />
+        </View>
+      </View>
+      {/* <View style={styles.flightStatusContainer}> */}
+      <View style={styles.cardsContainer}>
+        <View style={styles.flightInfoInDirect}>
+          <View style={styles.departureInfo}>
+            <Text style={styles.sinceDeparture}>Depuis départ</Text>
+            <Text style={styles.distanceAndTimeDepartureInfo}>
+              147 km en 0h32
+            </Text>
           </View>
-          <View style={styles.citiesContainer}>
-            <View style={styles.cityContainer}>
-              <Text style={styles.city}>Paris</Text>
-              <Text style={styles.aeroport}>ORY</Text>
-              <Text style={styles.timezone}>CEST (UTC+1:00)</Text>
-            </View>
-            <View style={styles.flightTicketsImgContainer}>
-              <Image
-                source={require("../assets/flight-tickets.png")}
-                style={styles.flightTicketsImg}
-              />
-            </View>
-            <View style={styles.cityContainer}>
-              <Text style={styles.city}>Lyon</Text>
-              <Text style={styles.aeroport}>LYS</Text>
-              <Text style={styles.timezone}>CEST (UTC+1:00)</Text>
-            </View>
+          <View style={styles.arrivalInfo}>
+            <Text style={styles.untilArrival}>Jusqu'à l'arrivée</Text>
+            <Text style={styles.distanceAndTimeArrivalInfo}>
+              258 km en 1h24
+            </Text>
           </View>
-          <View style={styles.flightScheduleContainer}>
-            <View style={styles.timeInfoContainer}>
-              <Text style={styles.flightScheduleTitle}>Prévu</Text>
-              <Text style={styles.flightScheduleTime}>14:00</Text>
-            </View>
-            <View style={styles.timeInfoContainer}>
-              <Text style={styles.flightScheduleTitle}>Prévu</Text>
-              <Text style={styles.flightScheduleTime}>15:02</Text>
-            </View>
+        </View>
+        <View style={styles.citiesContainer}>
+          <View style={styles.cityContainer}>
+            <Text style={styles.city}>Paris</Text>
+            <Text style={styles.aeroport}>ORY</Text>
+            <Text style={styles.timezone}>CEST (UTC+1:00)</Text>
           </View>
-          <View style={styles.flightScheduleContainer}>
-            <View style={styles.timeInfoContainer}>
-              <Text style={styles.flightScheduleTitle}>Réel</Text>
-              <Text style={styles.flightScheduleTime}>14:08</Text>
-            </View>
-            <View style={styles.timeInfoContainer}>
-              <Text style={styles.flightScheduleTitle}>Estimé</Text>
-              <Text style={styles.flightScheduleTime}>15:16</Text>
-            </View>
+          <View style={styles.flightTicketsImgContainer}>
+            <Image
+              source={require("../assets/flight-tickets.png")}
+              style={styles.flightTicketsImg}
+            />
+          </View>
+          <View style={styles.cityContainer}>
+            <Text style={styles.city}>Lyon</Text>
+            <Text style={styles.aeroport}>LYS</Text>
+            <Text style={styles.timezone}>CEST (UTC+1:00)</Text>
+          </View>
+        </View>
+        <View style={styles.flightScheduleContainer}>
+          <View style={styles.timeInfoContainer}>
+            <Text style={styles.flightScheduleTitle}>Prévu</Text>
+            <Text style={styles.flightScheduleTime}>14:00</Text>
+          </View>
+          <View style={styles.timeInfoContainer}>
+            <Text style={styles.flightScheduleTitle}>Prévu</Text>
+            <Text style={styles.flightScheduleTime}>15:02</Text>
+          </View>
+        </View>
+        <View style={styles.flightScheduleContainer}>
+          <View style={styles.timeInfoContainer}>
+            <Text style={styles.flightScheduleTitle}>Réel</Text>
+            <Text style={styles.flightScheduleTime}>14:08</Text>
+          </View>
+          <View style={styles.timeInfoContainer}>
+            <Text style={styles.flightScheduleTitle}>Estimé</Text>
+            <Text style={styles.flightScheduleTime}>15:16</Text>
           </View>
         </View>
       </View>
+      {/* </View> */}
 
       <WeatherCard />
-
     </View>
   );
 }
@@ -137,7 +138,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   flightDescription: {
-    flex: 6,
+    justifyContent: "space-between",
+    flex: 5,
     width: "100%",
   },
   flightHeader: {
@@ -201,6 +203,10 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     borderRadius: 1,
   },
+  cardsContainer: {
+    justifyContent: "space-between",
+    flex: 10
+  },
   flightInfoInDirect: {
     flexDirection: "row",
     width: "100%",
@@ -235,7 +241,9 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 10,
     width: "100%",
+    flex: 2.5,
     justifyContent: "space-between",
+    alignItems: "center",
     elevation: 3,
   },
   cityContainer: {
@@ -260,9 +268,10 @@ const styles = StyleSheet.create({
   flightTicketsImgContainer: {
     justifyContent: "center",
     alignItems: "center",
+
   },
   flightTicketsImg: {
-    width: 50,
+    width: 60,
     height: 35,
   },
   flightScheduleContainer: {
@@ -273,6 +282,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "white",
     padding: 10,
+    flex: 1,
     width: "100%",
     elevation: 3,
   },
