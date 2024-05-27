@@ -202,7 +202,7 @@ export default function TrackingScreen({ navigation }) {
             </TouchableOpacity>
           </View>
         </View>
-        <Text style={styles.flightStatusTitle}>{status === 'Unknown' ? 'En attente de départ' : status}</Text>
+        <Text style={styles.flightStatusTitle}>{status === 'Unknown' ? 'En attente de départ' : status.toUpperCase()}</Text>
         <Text style={styles.flightLengthDescription}>{`${Math.round(Number(greatCircleDistance.km))} km en ${totalFlightHours}h${totalFlightMinutes} min`}</Text>
         <View style={styles.routeContainer}>
 
@@ -306,7 +306,7 @@ const styles = StyleSheet.create({
     width: "33.33%",
   },
   flightNumber: {
-    fontSize: 22,
+    fontSize: 18,
     color: colors.dark1,
     fontWeight: "600",
     textAlign:'center',
@@ -330,8 +330,8 @@ const styles = StyleSheet.create({
   flightStatusTitle: {
     textAlign: "center",
     color: colors.dark1,
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 20,
+    fontWeight: "800",
     marginVertical: 12,
   },
   flightLengthDescription:{
