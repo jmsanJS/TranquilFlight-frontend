@@ -1,9 +1,8 @@
-import { View, Text, StyleSheet, Platform, StatusBar } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import CustomSwitch from "../components/CustomSwitch";
-
 import { colors } from "../assets/colors";
 import { backendURL } from "../assets/URLs";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   updateTimeFormat,
@@ -13,83 +12,89 @@ import {
   resetSettingsReducer,
 } from "../reducers/settings";
 
-export default function SettingsScreen({navigation}) {
+export default function SettingsScreen({ navigation }) {
   const dispatch = useDispatch();
   const settings = useSelector((state) => state.settings.value);
   const user = useSelector((state) => state.user.value);
-  console.log("settings ==>",settings)
-  console.log("user", user)
+
+  console.log("2. settings ==>", settings);
+  console.log("3. user", user);
+
   useEffect(() => {
-    navigation.addListener('focus', () => {
-      console.log("dans le addListener")
+    const fetchSettings = async () => {
       if (user.token !== null) {
-        fetch(`${backendURL}/user/settings`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email: user.email,
-            token: user.token,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.result) {
-              console.log("data ==>", data);
-              dispatch(updateTimeFormat(data.userData.timeFormat));
-              dispatch(updateDistanceUnit(data.userData.distUnit));
-              dispatch(updateTemperatureUnit(data.userData.tempUnit));
-              dispatch(updateNotifications(data.userData.globalNotification));
-            } else {
-              dispatch(resetSettingsReducer())
-              console.log("L'utilisateur n'est pas connecté.");
-            }
+        try {
+          const response = await fetch(`${backendURL}/user/settings`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: user.email,
+              token: user.token,
+            }),
           });
+          const data = await response.json();
+          if (data.result) {
+            console.log("data ==>", data);
+            dispatch(updateTimeFormat(data.userData.timeFormat));
+            dispatch(updateDistanceUnit(data.userData.distUnit));
+            dispatch(updateTemperatureUnit(data.userData.tempUnit));
+            dispatch(updateNotifications(data.userData.globalNotification));
+          }
+        } catch (error) {
+          console.error("Error fetching settings:", error);
+        }
       } else {
-        dispatch(resetSettingsReducer())
-        console.log("L'utilisateur n'est pas connecté.");
+        dispatch(resetSettingsReducer());
+        console.log("1. L'utilisateur n'est pas connecté.");
       }
-    })
+    };
+
+    navigation.addListener("focus", fetchSettings);
+
+    return () => {
+      navigation.removeListener("focus", fetchSettings);
+    };
   }, [dispatch, user, navigation]);
 
-  useEffect(() => {
+  const updateSettings = async (updatedSettings) => {
     if (user.token !== null) {
-      fetch(`${backendURL}/user/settings`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          token: user.token,
-          timeFormat: settings.timeFormat,
-          distUnit: settings.distanceUnit,
-          tempUnit: settings.temperatureUnit,
-          globalNotification: settings.notifications,
-        }),
-      })
-        .then((response) => response.json())
+      try {
+        const response = await fetch(`${backendURL}/user/settings`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            token: user.token,
+            ...updatedSettings,
+          }),
+        });
+        const data = await response.json();
+        console.log("data.data", data.data.settings);
+      } catch (error) {
+        console.error("Error updating settings:", error);
+      }
     } else {
-      console.log("Je suis déconnecté");
+      console.log("4. Je suis déconnecté");
     }
-  }, [settings, user]);
-
-  const handleTimeFormatSwitch = () => {
-    settings.timeFormat === "24h"
-      ? dispatch(updateTimeFormat("12h"))
-      : dispatch(updateTimeFormat("24h"));
   };
 
-  const handleDistanceUnitSwitch = () => {
-    settings.distanceUnit === "km"
-      ? dispatch(updateDistanceUnit("miles"))
-      : dispatch(updateDistanceUnit("km"));
+  const handleTimeFormatSwitch = (newFormat) => {
+    dispatch(updateTimeFormat(newFormat));
+    updateSettings({ timeFormat: newFormat });
   };
-  const handleTemperatureUnitSwitch = () => {
-    settings.temperatureUnit === "°C"
-      ? dispatch(updateTemperatureUnit("°F"))
-      : dispatch(updateTemperatureUnit("°C"));
+
+  const handleDistanceUnitSwitch = (newUnit) => {
+    dispatch(updateDistanceUnit(newUnit));
+    updateSettings({ distUnit: newUnit });
   };
-  const handleNotificationsSwitch = () => {
-    settings.notifications === "on"
-      ? dispatch(updateNotifications("off"))
-      : dispatch(updateNotifications("on"));
+
+  const handleTemperatureUnitSwitch = (newUnit) => {
+    dispatch(updateTemperatureUnit(newUnit));
+    updateSettings({ tempUnit: newUnit });
+  };
+
+  const handleNotificationsSwitch = (newStatus) => {
+    dispatch(updateNotifications(newStatus));
+    updateSettings({ globalNotification: newStatus });
   };
 
   return (
