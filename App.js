@@ -24,6 +24,7 @@ import user from './reducers/user';
 import flightsResult from './reducers/flightsResult';
 import favoriteFlights from './reducers/favoriteFlights';
 import flightDataTracking from './reducers/flightDataTracking';
+import settings from "./reducers/settings";
 
 // redux-persist imports
 import { persistStore, persistReducer } from "redux-persist";
@@ -31,7 +32,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 
-const reducers = combineReducers({ user, flightsResult, favoriteFlights, flightDataTracking });
+const reducers = combineReducers({ user, flightsResult, favoriteFlights, flightDataTracking, settings });
 const persistConfig = {
   key: "TranquilFlight",
   storage: AsyncStorage,

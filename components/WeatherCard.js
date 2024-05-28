@@ -11,21 +11,21 @@ import { useEffect, useState } from "react";
 function WeatherCard(props) {
   const [weatherData, setWeatherData] = useState(null);
 
-  useEffect(() => {
-    // const fetchWeatherData = async () => {
-    //   try {
-    //     const weatherDataResponse = await fetch(`${backendURL}/weather/Lyon`);
-    //     if (!weatherDataResponse.ok) {
-    //       throw new Error(`HTTP error! Status: ${weatherDataResponse.status}`);
-    //     }
-    //     const data = await weatherDataResponse.json();
-    //     setWeatherData(data.weatherData);
-    //   } catch (err) {
-    //     console.error(err);
-    //   }
-    // };
-    // fetchWeatherData();
-  }, []);
+  // useEffect(() => {
+  //   const fetchWeatherData = async () => {
+  //     try {
+  //       const weatherDataResponse = await fetch(`${backendURL}/weather/Lyon`);
+  //       if (!weatherDataResponse.ok) {
+  //         throw new Error(`HTTP error! Status: ${weatherDataResponse.status}`);
+  //       }
+  //       const data = await weatherDataResponse.json();
+  //       setWeatherData(data.weatherData);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+  //   fetchWeatherData();
+  // }, []);
 
   if (!weatherData) {
     return (

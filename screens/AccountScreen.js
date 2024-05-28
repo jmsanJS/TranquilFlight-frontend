@@ -17,6 +17,7 @@ import * as Crypto from "expo-crypto";
 
 import { useDispatch, useSelector } from "react-redux";
 import { updateEmail, logout } from "../reducers/user";
+import { resetSettingsReducer } from "../reducers/settings";
 
 export default function AccountScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -29,6 +30,7 @@ export default function AccountScreen({ navigation }) {
   const [successMessagePassword, setSuccessMessagePassword] = useState("");
 
   const user = useSelector((state) => state.user.value);
+  const settings = useSelector((state) => state.settings.value)
   console.log(user)
 	if (user.email === null){
 		navigation.navigate('Connexion')
@@ -149,6 +151,7 @@ export default function AccountScreen({ navigation }) {
 
 	const handleLogoutAccount = () => {
 		dispatch(logout());
+    dispatch(resetSettingsReducer())
 		navigation.navigate("Recherche")
 	}
 
