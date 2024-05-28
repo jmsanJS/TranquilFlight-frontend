@@ -59,7 +59,6 @@ import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
             onPress={() => updatedSwitchData(2)}
             style={{
                 flex: 1,
-
                 backgroundColor: getSelectionMode == 2 ? selectionColor : 'white',
                 borderRadius: getRoundCorner ? 25 : 0,
                 justifyContent: 'center',
