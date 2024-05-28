@@ -23,6 +23,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addFlight } from "../reducers/flightsResult";
+import { emptyReducer } from "../reducers/favoriteFlights";
 
 import { colors } from "../assets/colors";
 
@@ -30,6 +31,9 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SearchBar from "../components/SearchBar";
 
 export default function HomeScreen({ navigation }) {
+  const dispatch = useDispatch();
+
+  dispatch(emptyReducer())
 
   const dispatch = useDispatch();
 
