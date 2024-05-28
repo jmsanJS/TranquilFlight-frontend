@@ -10,13 +10,6 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
 } from "react-native";
-import {
-  updateTimeFormat,
-  updateDistanceUnit,
-  updateTemperatureUnit,
-  updateNotifications,
-  resetSettingsReducer,
-} from "../reducers/settings";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -24,6 +17,13 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addFlight } from "../reducers/flightsResult";
 import { emptyReducer } from "../reducers/favoriteFlights";
+import {
+  updateTimeFormat,
+  updateDistanceUnit,
+  updateTemperatureUnit,
+  updateNotifications,
+  resetSettingsReducer,
+} from "../reducers/settings";
 
 import { colors } from "../assets/colors";
 
@@ -33,12 +33,7 @@ import SearchBar from "../components/SearchBar";
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
 
-  dispatch(emptyReducer())
-
-  const dispatch = useDispatch();
-
   const user = useSelector((state) => state.user.value);
-  const settings = useSelector((state) => state.settings.value);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -75,8 +70,6 @@ export default function HomeScreen({ navigation }) {
       navigation.removeListener("focus", fetchSettings);
     };
   }, [dispatch, user, navigation]);
-
-
 
   return (
     <SafeAreaView style={styles.container}>
