@@ -38,9 +38,6 @@ export default function SearchResultScreen({ navigation }) {
   const flightData = useSelector((state) => state.flightsResult.value);
   const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
 
-  console.log('propss----->',flightData)
-  //dispatch(emptyReducer())
-
   if(flightData.length>0){
     setFlightCardData(flightData) 
     dispatch(removeFlight());
