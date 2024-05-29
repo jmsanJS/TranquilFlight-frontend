@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   TextInput,
   TouchableOpacity,
+  ScrollView
 } from "react-native";
 import { useState, useEffect } from "react";
 
@@ -156,7 +157,7 @@ export default function AccountScreen({ navigation }) {
 	}
 
   return (
-    <KeyboardAvoidingView style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.userDataContainer}>
         <Text style={styles.sectionTitle}>Informations personnelles</Text>
         <View style={styles.fieldContainer}>
@@ -282,7 +283,7 @@ export default function AccountScreen({ navigation }) {
 				</TouchableOpacity>
 			</View>
 			
-    </KeyboardAvoidingView>
+    </ScrollView>
   );
 }
 
@@ -290,10 +291,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    justifyContent: "center",
-    alignItems: "center",
+    //justifyContent: "center",
+    //alignItems: "center",
     backgroundColor: colors.lightGrey,
-    overflow: "scroll",
   },
   userDataContainer: {
     width: "100%",
