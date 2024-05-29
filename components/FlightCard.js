@@ -20,27 +20,31 @@ function FlightCard(props) {
   const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
 
   const [isFavorited, setIsFavorited] = useState(false);
+  const [flightDataState, setFlightDataState] = useState(false);
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (props.flightData && props.flightData.length > 0) {
-      const isFavorite = favoriteFlights.some(favorite => favorite[0][0].number === props.flightData[0][0].number);
+    if (props.flightData != {}) {
+      const isFavorite = favoriteFlights.some(favorite => favorite.flightNumber === props.flightData.flightNumber);
       setIsFavorited(isFavorite);
     }
+
+     // Fournir une valeur par défaut à props.flightData
+    var flightData = props.flightData;
+    setFlightDataState(props.flightData)
+  
+    if (props.flightData){
+      var date1 = moment(new Date(props.flightData.departure.scheduledTimeUTC));
+      var date2 = moment(new Date(props.flightData.arrival.scheduledTimeUTC));
+      setHours(date2.diff(date1, 'hours'));
+      setMinutes(moment.utc(moment(date2, "HH:mm:ss").diff(moment(date1, "HH:mm:ss"))).format("mm"));
+    }
+
   }, [favoriteFlights, props.flightData]);
 
-  // Fournir une valeur par défaut à props.flightData
-  const flightData = props.flightData || [];
-
-  if (flightData.length === 0) {
-    return null; // ou un indicateur de chargement
-  }
-
-  let date1 = moment(new Date(flightData[0][0].departure.scheduledTime.utc));
-  let date2 = moment(new Date(flightData[0][0].arrival.scheduledTime.utc));
-  let hours = date2.diff(date1, 'hours');
-  var mins = moment.utc(moment(date2, "HH:mm:ss").diff(moment(date1, "HH:mm:ss"))).format("mm");
 
   const handleNotificationClick = () => {
     console.log("notification");
@@ -53,29 +57,28 @@ function FlightCard(props) {
         fetch(`${backendURL}/user/favorite`,{
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ flightNumber: flightData[0][0].number, flightData: flightData, email: user.email, token: user.token }),
+          body: JSON.stringify({ flightNumber:props.flightData.flightNumber ,flightData: props.flightData, email: user.email, token: user.token }),
         })
         .then((response) => response.json())
-        .then(dispatch(addFavorite(flightData)))
+        .then(dispatch(addFavorite(props.flightData)))
   
       } else {
         fetch(`${backendURL}/user/favorite`,{
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ flightNumber: flightData[0][0].number, email: user.email, token: user.token }),
+          body: JSON.stringify({ flightNumber: props.flightData.number, email: user.email, token: user.token }),
         })
         .then((response) => response.json())
         .then(()=>{
-          console.log('delete',flightData[0][0].number)
-          dispatch(removeFavorite(flightData[0][0].number))
+          dispatch(removeFavorite(props.flightData.flightNumber))
         })
       }
 
     }else{
       if (!isFavorited) {
-        dispatch(addFavorite(flightData))
+        dispatch(addFavorite(props.flightData))
       } else {
-        dispatch(removeFavorite(flightData[0][0].number))
+        dispatch(removeFavorite(props.flightData.flightNumber))
       }
     }
   };
@@ -87,18 +90,19 @@ function FlightCard(props) {
 
   const handleFlightCardClick = async () => {
     dispatch(emptyFlight())
-    dispatch(addFlight({flightNumber:flightData[0][0].number , date:flightData[0][0].departure.scheduledTime.local.slice(0,10)}))
+    dispatch(addFlight({flightNumber:props.flightData.number , date:props.flightData.departure.scheduledTimeLocal.slice(0,10)}))
     navigation.navigate('Suivi du vol')
   }
 
   return (
+
     <TouchableOpacity onPress={()=>handleFlightCardClick()} style={styles.favoriteTripContainer}>
       <View style={styles.favoriteTripHeader}>
         <View style={styles.flightNumberContainer}>
-          <Text style={styles.flightNumberText}>{flightData[0][0].number}</Text>
-          <Text style={styles.companyText}>{flightData[0][0].airline.name}</Text>
+          <Text style={styles.flightNumberText}>{props.flightData.flightNumber}</Text>
+          <Text style={styles.companyText}>{props.flightData.airline}</Text>
         </View>
-        <Text style={styles.date}>{flightData[0][0].departure.scheduledTime.local.slice(0, 10)}</Text>
+        <Text style={styles.date}>{props.flightData.departure.scheduledTimeLocal.slice(0, 10)}</Text>
         <View style={styles.icons}>
           <TouchableOpacity onPress={handleNotificationClick}>
             <FontAwesome name="bell" size={25} color={colors.dark1} />
@@ -114,12 +118,12 @@ function FlightCard(props) {
       </View>
       <View style={styles.favoriteTripDescriptionContainer}>
         <View style={styles.departureInfo}>
-          <Text style={styles.departureTime}>{flightData[0][0].departure.scheduledTime.local.slice(11, 16)}</Text>
-          <Text style={styles.departureCity}>{flightData[0][0].departure.airport.municipalityName}</Text>
-          <Text style={styles.departureAirportCode}>{flightData[0][0].departure.airport.iata}</Text>
+          <Text style={styles.departureTime}>{props.flightData.departure.scheduledTimeLocal.slice(11, 16)}</Text>
+          <Text style={styles.departureCity}>{props.flightData.departure.city}</Text>
+          <Text style={styles.departureAirportCode}>{props.flightData.departure.iata}</Text>
         </View>
         <View style={styles.routeLineContainer}>
-          <Text style={styles.tripTime}>{`${hours}h${mins}`}</Text>
+          <Text style={styles.tripTime}>{`${hours}h${minutes}`}</Text>
           <View style={styles.routeLineAndTripTime}>
             <View style={styles.routeLine}></View>
             <FontAwesome5
@@ -128,15 +132,15 @@ function FlightCard(props) {
               color={colors.dark1}
               style={styles.planeIcon}
             />
-          </View>
+          </View> 
         </View>
         <View style={styles.arrivalInfo}>
-          <Text style={styles.arrivalTime}>{flightData[0][0].arrival.scheduledTime.local.slice(11, 16)}</Text>
-          <Text style={styles.arrivalCity}>{flightData[0][0].arrival.airport.municipalityName}</Text>
-          <Text style={styles.arrivalAirportCode}>{flightData[0][0].arrival.airport.iata}</Text>
+          <Text style={styles.arrivalTime}>{props.flightData.arrival.scheduledTimeLocal.slice(11, 16)}</Text>
+          <Text style={styles.arrivalCity}>{props.flightData.arrival.city}</Text>
+          <Text style={styles.arrivalAirportCode}>{props.flightData.arrival.iata}</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableOpacity> 
   );
 }
 

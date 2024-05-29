@@ -12,11 +12,13 @@ import {
 } from "react-native";
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import {backendURL} from '../assets/URLs'
 
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addFlight } from "../reducers/flightsResult";
 import { emptyReducer } from "../reducers/favoriteFlights";
+import { emptyFlight } from "../reducers/flightDataTracking";
 import {
   updateTimeFormat,
   updateDistanceUnit,
@@ -32,6 +34,9 @@ import SearchBar from "../components/SearchBar";
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
+
+  //dispatch(emptyReducer())
+  //dispatch(emptyFlight())
 
   const user = useSelector((state) => state.user.value);
 

@@ -11,10 +11,8 @@ export const favoriteFlightsSlice = createSlice({
         addFavorite: (state, action) => {
             state.value.push(action.payload);
         },
-        removeFavorite:(state, action) => {
-            state.value = state.value.filter((favorite) => favorite[0][0].number !== action.payload);
-
-
+        removeFavorite:(state, action) => { 
+            state.value = state.value.filter((favorite) => favorite.flightNumber !== action.payload);
         },
         emptyReducer: (state) => {
             state.value =[]
