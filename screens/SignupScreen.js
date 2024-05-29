@@ -10,10 +10,11 @@ import {
   KeyboardAvoidingView,
   ScrollView,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import * as Crypto from "expo-crypto";
 import { colors } from "../assets/colors";
 import { backendURL } from "../assets/URLs";
+import { login } from "../reducers/user"
 
 export default function SignupScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -24,7 +25,9 @@ export default function SignupScreen({ navigation }) {
   const [errorMessage, setErrorMessage] = useState("");
   const timeoutRef = useRef(null);
 
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
+
   if (user.email != null) {
     navigation.navigate("Mon Compte");
   }
@@ -82,7 +85,6 @@ export default function SignupScreen({ navigation }) {
       Crypto.CryptoDigestAlgorithm.SHA256,
       password
     );
-    console.log(hashedPassword);
     fetch(`${backendURL}/user/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -96,6 +98,7 @@ export default function SignupScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
+          dispatch(login(data.userData));
           setErrorMessage("");
           setEmail("");
           setPassword("");
@@ -194,7 +197,7 @@ export default function SignupScreen({ navigation }) {
           </View>
           <TouchableOpacity
             style={styles.loginBtn}
-            onPress={() => handleSubmit()}
+            onPress={() => {handleSubmit(); }}
           >
             <Text style={styles.loginBtnTxt}>Connexion</Text>
           </TouchableOpacity>

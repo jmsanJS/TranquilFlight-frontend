@@ -21,9 +21,9 @@ import { login } from "../reducers/user";
 export default function SigninScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
 
-  if (user.email != null) {
-    navigation.navigate("Mon Compte");
-  }
+  // if (user.email != null) {
+  //   navigation.navigate("Mon Compte");
+  // }
 
   const dispatch = useDispatch();
 
@@ -57,7 +57,7 @@ export default function SigninScreen({ navigation }) {
           setEmail("");
           setPassword("");
           dispatch(login(data.userData));
-          navigation.navigate("Recherche");
+          navigation.navigate("Home");
         } else if (data.result === false) {
           setErrorMessage(data.error);
           timeoutRef.current = setTimeout(() => {

@@ -3,22 +3,21 @@ import {
   Text,
   StyleSheet,
   Platform,
-  StatusBar,
+  Alert,
   KeyboardAvoidingView,
   TextInput,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { colors } from "../assets/colors";
-import {backendURL} from '../assets/URLs'
+import { backendURL } from "../assets/URLs";
 
 import * as Crypto from "expo-crypto";
 
 import { useDispatch, useSelector } from "react-redux";
 import { updateEmail, logout } from "../reducers/user";
-import { resetSettingsReducer } from "../reducers/settings";
 
 export default function AccountScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -30,18 +29,29 @@ export default function AccountScreen({ navigation }) {
   const [successMessageMail, setSuccessMessageMail] = useState("");
   const [successMessagePassword, setSuccessMessagePassword] = useState("");
 
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
-  const settings = useSelector((state) => state.settings.value)
-  console.log(user)
-	if (user.email === null){
-		navigation.navigate('Connexion')
-}
-	const dispatch = useDispatch();
+  const timeoutRef = useRef(null);
 
-	console.log(user.email)
+  // if (user.email === null) {
+  //   navigation.navigate("Connexion");
+  // }
 
-  const handleChangeEmail = () => {
-    if (
+  const messageTimeOut = () => {
+    timeoutRef.current = setTimeout(() => {
+      setErrorMessageMail("");
+      setErrorMessagePassword("");
+      setSuccessMessageMail("");
+      setSuccessMessagePassword("");
+    }, 4000);
+  };
+
+  const validateAndAlert = () => {
+    if (email === user.email || email === "") {
+      setErrorMessageMail("Saisissez votre nouvelle adresse mail");
+      messageTimeOut();
+      return;
+    } else if (
       !String(email)
         .toLowerCase()
         .match(
@@ -49,36 +59,50 @@ export default function AccountScreen({ navigation }) {
         )
     ) {
       setErrorMessageMail("L'adresse mail est invalide");
+      messageTimeOut();
       return;
     }
 
-		fetch(`${backendURL}/user/profile-update`, {
+    modifyEmailAlert();
+  };
+
+  const handleChangeEmail = () => {
+    fetch(`${backendURL}/user/profile-update`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         oldEmail: user.email,
-				newEmail:email,
-        token:user.token,
+        newEmail: email,
+        token: user.token,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log(data.result);
-					dispatch(updateEmail(email));
+          dispatch(updateEmail(email));
           setErrorMessageMail("");
           setSuccessMessageMail(data.message);
+          messageTimeOut();
         } else if (data.result === false) {
-          setSuccessMessageMail("");
           setErrorMessageMail(data.error);
+          messageTimeOut();
         }
       });
   };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleChangePassword = async () => {
     if (newPassword != newPasswordCheck) {
       setSuccessMessagePassword("");
       setErrorMessagePassword("Les mots de passe ne correspondent pas");
+      messageTimeOut();
       return;
     }
 
@@ -92,6 +116,7 @@ export default function AccountScreen({ navigation }) {
       setErrorMessagePassword(
         "Le mot de passe doit contenir au moins 8 caractères dont une lettre, un numéro et un caractère spécial"
       );
+      messageTimeOut();
       return;
     }
 
@@ -105,8 +130,6 @@ export default function AccountScreen({ navigation }) {
       oldPassword
     );
 
-    console.log(hashedOldPassword, hashedNewPassword, user.email);
-
     fetch(`${backendURL}/user`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -119,21 +142,22 @@ export default function AccountScreen({ navigation }) {
       .then((response) => response.json())
       .then((data) => {
         if (data.result) {
-          console.log(data.result);
           setErrorMessagePassword("");
           setSuccessMessagePassword(data.message);
           setOldPassword("");
           setNewPassword("");
           setNewPasswordCheck("");
+          messageTimeOut();
         } else if (data.result === false) {
           setSuccessMessagePassword("");
           setErrorMessagePassword(data.error);
+          messageTimeOut();
         }
       });
   };
 
-	const handleDeleteAccount = () => {
-		fetch(`${backendURL}/user`, {
+  const handleDeleteAccount = () => {
+    fetch(`${backendURL}/user`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -147,158 +171,214 @@ export default function AccountScreen({ navigation }) {
           dispatch(logout());
         }
       });
-		navigation.navigate("Recherche")
-	}
+    navigation.navigate("Home");
+  };
 
-	const handleLogoutAccount = () => {
-		dispatch(logout());
-    dispatch(resetSettingsReducer())
-		navigation.navigate("Recherche")
-	}
+  const handleLogoutAccount = () => {
+    dispatch(logout());
+    navigation.navigate("Home");
+  };
+
+  const deleteAcountAlert = () =>
+    Alert.alert(
+      "Suppression de compte",
+      "Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.",
+      [
+        {
+          text: "Non",
+          style: "cancel",
+        },
+        { text: "Oui", onPress: () => handleDeleteAccount() },
+      ]
+    );
+
+  const modifyEmailAlert = () =>
+    Alert.alert(
+      "Modification d'email",
+      "Êtes-vous sûr de vouloir modifier l'email de votre compte?",
+      [
+        {
+          text: "Non",
+          style: "cancel",
+        },
+        { text: "Oui", onPress: () => handleChangeEmail() },
+      ]
+    );
+
+  const signOutAlert = () =>
+    Alert.alert("Déconnexion", "Êtes-vous sûr de vouloir vous déconnecter ?", [
+      {
+        text: "Non",
+        style: "cancel",
+      },
+      { text: "Oui", onPress: () => handleLogoutAccount() },
+    ]);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.userDataContainer}>
-        <Text style={styles.sectionTitle}>Informations personnelles</Text>
-        <View style={styles.fieldContainer}>
-          <View style={styles.fieldSet}>
-            <Text style={styles.legend}>Prénom</Text>
-            <TextInput
-              cursorColor={colors.light1}
-              editable={false}
-              allowFontScaling={true}
-              style={styles.inputsLocked}
-              placeholder={user.firstname}
-            ></TextInput>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "android" ? "height" : "padding"}
+      keyboardVerticalOffset={85}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.userDataContainer}>
+          <Text style={styles.sectionTitle}>Informations personnelles</Text>
+          <View style={styles.fieldContainer}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>Prénom</Text>
+              <TextInput
+                cursorColor={colors.light1}
+                editable={false}
+                allowFontScaling={true}
+                style={styles.inputsLocked}
+                placeholder={user.firstname}
+              ></TextInput>
+            </View>
           </View>
-        </View>
-        <View style={styles.fieldContainer}>
-          <View style={styles.fieldSet}>
-            <Text style={styles.legend}>Nom de famille</Text>
-            <TextInput
-              cursorColor={colors.light1}
-              editable={false}
-              allowFontScaling={true}
-              style={styles.inputsLocked}
-              placeholder={user.lastname}
-            ></TextInput>
+          <View style={styles.fieldContainer}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>Nom de famille</Text>
+              <TextInput
+                cursorColor={colors.light1}
+                editable={false}
+                allowFontScaling={true}
+                style={styles.inputsLocked}
+                placeholder={user.lastname}
+              ></TextInput>
+            </View>
           </View>
-        </View>
-        <View style={styles.fieldContainer}>
-          <View style={styles.fieldSet}>
-            <Text style={styles.legend}>Email</Text>
-            <TextInput
-              placeholder={user.email}
-              cursorColor={colors.light1}
-              allowFontScaling={true}
-              keyboardType="email-address"
-              style={styles.inputs}
-              onChangeText={(value) => setEmail(value)}
-            ></TextInput>
+          <View style={styles.fieldContainer}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>Email</Text>
+              <TextInput
+                placeholder={user.email}
+                cursorColor={colors.light1}
+                autoCapitalize="none"
+                allowFontScaling={true}
+                keyboardType="email-address"
+                style={styles.inputs}
+                onChangeText={(value) => setEmail(value)}
+              ></TextInput>
+            </View>
           </View>
+          {errorMessageMail ? (
+            <View style={styles.errorMessageContainer}>
+              <Text style={styles.errorMessage}>{errorMessageMail}</Text>
+            </View>
+          ) : null}
+          {successMessageMail ? (
+            <View style={styles.successMessageContainer}>
+              <Text style={styles.successMessage}>{successMessageMail}</Text>
+            </View>
+          ) : null}
+          <TouchableOpacity
+            style={styles.validButton}
+            onPress={() => validateAndAlert()}
+          >
+            <Text style={styles.validButtonText}>Modifier l'email</Text>
+          </TouchableOpacity>
         </View>
-        {errorMessageMail ? <View style={styles.errorMessageContainer}>
-          <Text style={styles.errorMessage}>{errorMessageMail}</Text>
-        </View> : null}
-        {successMessageMail ? <View style={styles.successMessageContainer}>
-          <Text style={styles.successMessage}>{successMessageMail}</Text>
-        </View> : null}
-        <TouchableOpacity
-          style={styles.validButton}
-          onPress={() => handleChangeEmail()}
-        >
-          <Text style={styles.validButtonText}>Valider les modifications</Text>
-        </TouchableOpacity>
-      </View>
 
-      <View style={styles.userNewPasswordContainer}>
-        <Text style={styles.sectionTitle}>
-          Réinitialisation du mot de passe
-        </Text>
-        <View style={styles.fieldContainer}>
-          <View style={styles.fieldSet}>
-            <Text style={styles.legend}>Ancien mot de passe</Text>
-            <TextInput
-              textContentType={"password"}
-              secureTextEntry={true}
-              cursorColor={colors.light1}
-              allowFontScaling={true}
-              style={styles.inputs}
-              onChangeText={(value) => setOldPassword(value)}
-            ></TextInput>
+        <View style={styles.userNewPasswordContainer}>
+          <Text style={styles.sectionTitle}>
+            Réinitialisation du mot de passe
+          </Text>
+          <View style={styles.fieldContainer}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>Ancien mot de passe</Text>
+              <TextInput
+                textContentType={"password"}
+                secureTextEntry={true}
+                cursorColor={colors.light1}
+                allowFontScaling={true}
+                style={styles.inputs}
+                onChangeText={(value) => setOldPassword(value)}
+              ></TextInput>
+            </View>
           </View>
-        </View>
-        <View style={styles.fieldContainer}>
-          <View style={styles.fieldSet}>
-            <Text style={styles.legend}>Nouveau mot de passe</Text>
-            <TextInput
-              textContentType={"password"}
-              secureTextEntry={true}
-              cursorColor={colors.light1}
-              allowFontScaling={true}
-              style={styles.inputs}
-              onChangeText={(value) => setNewPassword(value)}
-            ></TextInput>
+          <View style={styles.fieldContainer}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>Nouveau mot de passe</Text>
+              <TextInput
+                textContentType={"password"}
+                secureTextEntry={true}
+                cursorColor={colors.light1}
+                allowFontScaling={true}
+                style={styles.inputs}
+                onChangeText={(value) => setNewPassword(value)}
+              ></TextInput>
+            </View>
           </View>
-        </View>
-        <View style={styles.fieldContainer}>
-          <View style={styles.fieldSet}>
-            <Text style={styles.legend}>Confirmez le nouveau mot de passe</Text>
-            <TextInput
-              textContentType={"password"}
-              secureTextEntry={true}
-              cursorColor={colors.light1}
-              allowFontScaling={true}
-              style={styles.inputs}
-              onChangeText={(value) => setNewPasswordCheck(value)}
-            ></TextInput>
+          <View style={styles.fieldContainer}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>
+                Confirmez le nouveau mot de passe
+              </Text>
+              <TextInput
+                textContentType={"password"}
+                secureTextEntry={true}
+                cursorColor={colors.light1}
+                allowFontScaling={true}
+                style={styles.inputs}
+                onChangeText={(value) => setNewPasswordCheck(value)}
+              ></TextInput>
+            </View>
           </View>
+          {errorMessagePassword ? (
+            <View style={styles.errorMessageContainer}>
+              <Text style={styles.errorMessage}>{errorMessagePassword}</Text>
+            </View>
+          ) : null}
+          {successMessagePassword ? (
+            <View style={styles.successMessageContainer}>
+              <Text style={styles.successMessage}>
+                {successMessagePassword}
+              </Text>
+            </View>
+          ) : null}
+          <TouchableOpacity
+            style={styles.validButton}
+            onPress={() => handleChangePassword()}
+          >
+            <Text style={styles.validButtonText}>Modifier le mot de passe</Text>
+          </TouchableOpacity>
         </View>
-        {errorMessagePassword ? <View style={styles.errorMessageContainer}>
-          <Text style={styles.errorMessage}>{errorMessagePassword}</Text>
-        </View> : null}
-        {successMessagePassword ? <View style={styles.successMessageContainer}>
-          <Text style={styles.successMessage}>{successMessagePassword}</Text>
-        </View> : null}
-        <TouchableOpacity
-          style={styles.validButton}
-          onPress={() => handleChangePassword()}
-        >
-          <Text style={styles.validButtonText}>Modifier le mot de passe</Text>
-        </TouchableOpacity>
-      </View>
 
-			<View style={styles.optionsContainer}>
-				<TouchableOpacity
-					style={styles.deleteAccount}
-					onPress={() => handleLogoutAccount()}
-				>
-					<Text style={styles.deleteAccountTxt}>Se déconnecter</Text>
-				</TouchableOpacity>
-				<TouchableOpacity
-					style={styles.deleteAccount}
-					onPress={() => handleDeleteAccount()}
-				>
-					<Text style={styles.deleteAccountTxt}>Supprimer mon compte</Text>
-				</TouchableOpacity>
-			</View>
-			
-    </ScrollView>
+        <View style={styles.optionsContainer}>
+          <TouchableOpacity
+            style={styles.deleteAccount}
+            onPress={() => signOutAlert()}
+          >
+            <Text style={styles.deleteAccountTxt}>Se déconnecter</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.deleteAccount}
+            onPress={() => deleteAcountAlert()}
+          >
+            <Text style={styles.deleteAccountTxt}>Supprimer mon compte</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-    //justifyContent: "center",
-    //alignItems: "center",
+    // paddingTop: Platform.OS === "android" ? "height" : "padding",
     backgroundColor: colors.lightGrey,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: 65,
   },
   userDataContainer: {
     width: "100%",
     alignItems: "center",
-		marginTop:20,
+    // marginTop: 10,
   },
   userNewPasswordContainer: {
     width: "100%",
@@ -366,11 +446,11 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 15,
   },
-	optionsContainer:{
-		width:'100%',
-		flexDirection:'row',
-		justifyContent:'space-evenly'
-	},
+  optionsContainer: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+  },
   deleteAccount: {
     marginTop: 20,
     marginBottom: 20,

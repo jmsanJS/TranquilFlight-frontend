@@ -18,12 +18,12 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 import { colors } from "./assets/colors";
 
-import { Provider } from 'react-redux';
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import user from './reducers/user';
-import flightsResult from './reducers/flightsResult';
-import favoriteFlights from './reducers/favoriteFlights';
-import flightDataTracking from './reducers/flightDataTracking';
+import { Provider } from "react-redux";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import user from "./reducers/user";
+import flightsResult from "./reducers/flightsResult";
+import favoriteFlights from "./reducers/favoriteFlights";
+import flightDataTracking from "./reducers/flightDataTracking";
 import settings from "./reducers/settings";
 
 // redux-persist imports
@@ -32,7 +32,13 @@ import { PersistGate } from "redux-persist/integration/react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 
-const reducers = combineReducers({ user, flightsResult, favoriteFlights, flightDataTracking, settings });
+const reducers = combineReducers({
+  user,
+  flightsResult,
+  favoriteFlights,
+  flightDataTracking,
+  settings,
+});
 const persistConfig = {
   key: "TranquilFlight",
   storage: AsyncStorage,
@@ -55,7 +61,9 @@ const FavoriteStack = createNativeStackNavigator();
 const SettingsStack = createNativeStackNavigator();
 
 function AccountStackScreen() {
+  const userReducer = useSelector((state) => state.user.value);
 
+  console.log(userReducer);
   return (
     <AccountStack.Navigator
       screenOptions={({ route }) => ({
@@ -66,9 +74,16 @@ function AccountStackScreen() {
         headerTitleAlign: "center",
       })}
     >
-      <AccountStack.Screen name="Connexion" component={SigninScreen} />
-      <AccountStack.Screen name="Créer un compte" component={SignupScreen} />
-      <AccountStack.Screen name="Mon Compte" component={AccountScreen} />
+      {userReducer.token === null && (
+        <>
+          <AccountStack.Screen name="Connexion" component={SigninScreen} />
+          <AccountStack.Screen name="Créer un compte" component={SignupScreen}
+          />
+        </>
+      )}
+      {userReducer.token !== null && (
+        <AccountStack.Screen name="Mon Compte" component={AccountScreen} />
+      )}
     </AccountStack.Navigator>
   );
 }
@@ -83,9 +98,16 @@ function SearchStackScreen() {
         headerTintColor: "white",
         headerTitleAlign: "center",
       })}
-      >
-      <SearchStack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
-      <SearchStack.Screen name="Résultats de recherche" component={SearchResultScreen} />
+    >
+      <SearchStack.Screen
+        options={{ headerShown: false }}
+        name="Home"
+        component={HomeScreen}
+      />
+      <SearchStack.Screen
+        name="Résultats de recherche"
+        component={SearchResultScreen}
+      />
     </SearchStack.Navigator>
   );
 }
@@ -100,10 +122,9 @@ function FavoriteStackScreen() {
         headerTintColor: "white",
         headerTitleAlign: "center",
       })}
-      >
+    >
       <FavoriteStack.Screen name="Mes favoris" component={FavoriteScreen} />
-      <FavoriteStack.Screen name="Suivi du vol" component={TrackingScreen}/>
-      
+      <FavoriteStack.Screen name="Suivi du vol" component={TrackingScreen} />
     </FavoriteStack.Navigator>
   );
 }
@@ -118,15 +139,16 @@ function SettingsStackScreen() {
         headerTintColor: "white",
         headerTitleAlign: "center",
       })}
-      >
-        <SettingsStack.Screen name="Paramètres utilisateur" component={SettingsScreen} />
-      
+    >
+      <SettingsStack.Screen
+        name="Paramètres utilisateur"
+        component={SettingsScreen}
+      />
     </SettingsStack.Navigator>
   );
 }
 
 export default function App() {
-
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
