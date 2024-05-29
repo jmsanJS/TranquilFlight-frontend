@@ -8,10 +8,10 @@ import {
   TextInput,
   KeyboardAvoidingView,
 } from "react-native";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { colors } from "../assets/colors";
-import {backendURL} from '../assets/URLs'
+import { backendURL } from "../assets/URLs";
 
 import * as Crypto from "expo-crypto";
 
@@ -31,6 +31,7 @@ export default function SigninScreen({ navigation }) {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [isFocused, setIsFocused] = useState({ email: false, password: false });
+  const timeoutRef = useRef(null);
 
   const handleFocus = (key) => {
     setIsFocused((prevState) => ({ ...prevState, [key]: true }));
@@ -40,28 +41,39 @@ export default function SigninScreen({ navigation }) {
     setIsFocused((prevState) => ({ ...prevState, [key]: false }));
   };
 
-    const handleSubmit = async () => {
-        console.log('front')
-        const hashedPassword = await Crypto.digestStringAsync(
-            Crypto.CryptoDigestAlgorithm.SHA256, password
-        )
-        console.log(hashedPassword)
+  const handleSubmit = async () => {
+    const hashedPassword = await Crypto.digestStringAsync(
+      Crypto.CryptoDigestAlgorithm.SHA256,
+      password
+    );
     fetch(`${backendURL}/user/signin`, {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ email: email, password: hashedPassword }),
-		}).then(response => response.json())
-        .then(data => {
-            if (data.result) {
-                setEmail('');
-                setPassword('');
-                dispatch(login(data.userData));
-                navigation.navigate('Recherche')
-            }else if (data.result===false){
-                setErrorMessage(data.error)
-            }
-        });
-    }
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, password: hashedPassword }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.result) {
+          setEmail("");
+          setPassword("");
+          dispatch(login(data.userData));
+          navigation.navigate("Recherche");
+        } else if (data.result === false) {
+          setErrorMessage(data.error);
+          timeoutRef.current = setTimeout(() => {
+            setErrorMessage("");
+          }, 4000);      
+        }
+      });
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <KeyboardAvoidingView
@@ -69,9 +81,9 @@ export default function SigninScreen({ navigation }) {
       style={styles.container}
     >
       <View style={styles.emailConnectContainer}>
-        <View style={styles.errorMessageContainer}>
+        {/* <View style={styles.errorMessageContainer}>
           <Text style={styles.errorMessage}>{errorMessage}</Text>
-        </View>
+        </View> */}
         <View style={styles.dropShadow}>
           <View
             style={[styles.fieldSet, isFocused.email && styles.focusedInput]}
@@ -106,6 +118,9 @@ export default function SigninScreen({ navigation }) {
               onBlur={() => handleBlur("password")}
             ></TextInput>
           </View>
+        </View>
+        <View style={styles.errorMessageContainer}>
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
         </View>
         <TouchableOpacity
           style={styles.loginBtn}
@@ -142,6 +157,7 @@ const styles = StyleSheet.create({
   errorMessageContainer: {
     width: "80%",
     marginBottom: 2,
+    // marginTop: -15,
   },
   errorMessage: {
     color: "red",
