@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    value: [],
+    value: {},
 };
 
 export const flightDataTrackingSlice = createSlice({
@@ -12,7 +12,7 @@ export const flightDataTrackingSlice = createSlice({
             state.value = action.payload
         },
         emptyFlight: (state) => {
-            state.value =[]
+            state.value = {}
         }
     },
 });

@@ -67,7 +67,6 @@ function SearchBar(props) {
         fetch(`${backendURL}/flights/${numberOfFlight}/${dateOfFlight}`)
         .then((response) => response.json())
         .then((data) => {
-            
             if (data.result) {
             dispatch(removeFlight());
             dispatch(addFlight(data.flightData));

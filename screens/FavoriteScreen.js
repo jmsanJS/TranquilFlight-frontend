@@ -37,17 +37,15 @@ export default function MyFlightsScreen({navigation}) {
                 if (data.favorites){
                     dispatch(emptyReducer())
                     for (let favorite of data.favorites){
-                        console.log(favorite)
                         dispatch(addFavorite(favorite.flightData))
                     }
                 }
-                console.log(favoriteFlights)
             })     
     }
     }, []);
-    console.log(favoriteFlights)
+    
+    
     return (
-        
         <View style={styles.container}>
             <Text style={styles.title}>Mes vols favoris</Text>
             {favoriteFlights.length>0 ?

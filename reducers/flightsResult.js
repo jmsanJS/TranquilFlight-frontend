@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    value: [],
+    value: {},
 };
 
 export const flightsSlice = createSlice({
@@ -9,10 +9,10 @@ export const flightsSlice = createSlice({
     initialState,
     reducers: {
         addFlight: (state, action) => {
-            state.value.push(action.payload);
+            state.value = action.payload
         },
         removeFlight:(state) => {
-            state.value = [];
+            state.value = {};
         },
     },
 });

@@ -40,91 +40,34 @@ export default function TrackingScreen({ navigation }) {
   const [totalFlightHours, setTotalFlightHours]=useState()
   const [totalFlightMinutes, setTotalFlightMinutes]=useState()
 
-  let flightData = [
-    {
-      "greatCircleDistance": {
-        "meter": 1475075.27,
-        "km": 1475.08,
-        "mile": 916.57,
-        "nm": 796.48,
-        "feet": 4839485.8
-      },
-      "departure": {
-        "airport": {
-          "icao": "EBBR",
-          "iata": "BRU",
-          "name": "Brussels ",
-          "shortName": "Brussels",
-          "municipalityName": "Brussels",
-          "location": {
-            "lat": 50.9014,
-            "lon": 4.484439
-          },
-          "countryCode": "BE"
-        },
-        "scheduledTime": {
-          "utc": "2024-05-27 08:30Z",
-          "local": "2024-05-27 10:30+02:00"
-        },
-        "revisedTime": {
-          "utc": "2024-05-27 08:52Z",
-          "local": "2024-05-27 10:52+02:00"
-        },
-        "runwayTime": {
-          "utc": "2024-05-27 08:53Z",
-          "local": "2024-05-27 10:53+02:00"
-        },
-        "checkInDesk": "05",
-        "quality": [
-          "Basic",
-          "Live"
-        ]
-      },
-      "arrival": {
-        "airport": {
-          "icao": "LPPR",
-          "iata": "OPO",
-          "name": "Porto Francisco de Sá Carneiro",
-          "shortName": "Francisco de Sá Carneiro",
-          "municipalityName": "Porto",
-          "location": {
-            "lat": 41.2481,
-            "lon": -8.681389
-          },
-          "countryCode": "PT"
-        },
-        "scheduledTime": {
-          "utc": "2024-05-27 11:05Z",
-          "local": "2024-05-27 12:05+01:00"
-        },
-        "revisedTime": {
-          "utc": "2024-05-27 10:59Z",
-          "local": "2024-05-27 11:59+01:00"
-        },
-        "terminal": "1",
-        "quality": [
-          "Basic",
-          "Live"
-        ]
-      },
-      "lastUpdatedUtc": "2024-05-27 10:11Z",
-      "number": "SN 3811",
-      "callSign": "BEL1MR",
-      "status": "Arrived",
-      "codeshareStatus": "IsOperator",
-      "isCargo": false,
-      "aircraft": {
-        "reg": "OO-SNF",
-        "modeS": "44CDC6",
-        "model": "Airbus A320"
-      },
-      "airline": {
-        "name": "Brussels",
-        "iata": "SN",
-        "icao": "BEL"
-      }
+  const [isFavorited, setIsFavorited] = useState(false);
+  const dispatch = useDispatch();
+
+  let flightData = {
+    "flightNumber": "TB 1432",
+    "date": "2024-05-29",
+    "airline": "TUI  Belgium",
+    "status": "Departed",
+    "lastUpdateUTC": "2024-05-29 07:42Z",
+    "distance": 1250.02,
+    "departure": {
+      "iata": "PMI",
+      "city": "Palma De Mallorca",
+      "terminal": "N",
+      "countryCode": "ES",
+      "scheduledTimeUTC": "2024-05-29 07:05Z",
+      "scheduledTimeLocal": "2024-05-29 09:05+02:00",
+      "revisedTimeUTC": "2024-05-29 07:04Z",
+      "revisedTimeLocal": "2024-05-29 09:04+02:00"
+    },
+    "arrival": {
+      "iata": "LGG",
+      "city": "Liège",
+      "countryCode": "BE",
+      "scheduledTimeUTC": "2024-05-29 09:45Z",
+      "scheduledTimeLocal": "2024-05-29 11:45+02:00"
     }
-  ]
+  }
 
   useEffect(() => {
 
@@ -140,9 +83,9 @@ export default function TrackingScreen({ navigation }) {
     //         }
     //     });
     
-    const lastUpdate = moment(lastUpdatedUtc)
-    const departureTime = moment(departure.revisedTime.utc)
-    const arrivalTime = moment(arrival.revisedTime.utc)
+    const lastUpdate = moment(lastUpdatedUTC)
+    const departureTime = moment(departure.revisedTimeUTC)
+    const arrivalTime = moment(arrival.revisedTimeUTC)
 
     const flightDuration = moment.duration(lastUpdate.diff(departureTime))
     setFromDepartureHours(flightDuration.hours())
@@ -169,14 +112,54 @@ export default function TrackingScreen({ navigation }) {
   }, []);
 
   const {
-    number,
+    flightNumber,
+    date,
     airline,
     status,
     departure,
     arrival,
-    greatCircleDistance,
-    lastUpdatedUtc,
-  } = flightData[0];
+    distance,
+    lastUpdatedUTC,
+  } = flightData;
+
+
+  const handleFavoriteClick = () => {
+    if(user.token){
+
+      if (!isFavorited) {
+        fetch(`${backendURL}/user/favorite`,{
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ flightNumber:flightData.flightNumber ,flightData: flightData, email: user.email, token: user.token }),
+        })
+        .then((response) => response.json())
+        .then(dispatch(addFavorite(flightData)))
+  
+      } else {
+        fetch(`${backendURL}/user/favorite`,{
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ flightNumber: flightData.flightNumber, email: user.email, token: user.token }),
+        })
+        .then((response) => response.json())
+        .then(()=>{
+          dispatch(removeFavorite(flightData.flightNumber))
+        })
+      }
+
+    }else{
+      if (!isFavorited) {
+        dispatch(addFavorite(flightData))
+      } else {
+        dispatch(removeFavorite(flightData.flightNumber))
+      }
+    }
+  };
+
+  let iconStyle = { color: 'grey', marginLeft: 10 };
+  if (isFavorited) {
+    iconStyle = { color: 'red', marginLeft: 10 };
+  }
 
 
   return (
@@ -185,8 +168,8 @@ export default function TrackingScreen({ navigation }) {
         <View style={styles.flightHeader}>
           <View style={styles.leftSpace}></View>
           <View>
-            <Text style={styles.flightNumber}>{number}</Text>
-            <Text style={styles.airline}>{airline.name}</Text>
+            <Text style={styles.flightNumber}>{flightNumber}</Text>
+            <Text style={styles.airline}>{airline}</Text>
           </View>
           <View style={styles.icons}>
             <TouchableOpacity onPress={() => handleNotificationClick()}>
@@ -197,13 +180,13 @@ export default function TrackingScreen({ navigation }) {
                 name="heart"
                 size={25}
                 color={colors.dark1}
-                style={styles.heartIcon}
+                style={iconStyle}
               />
             </TouchableOpacity>
           </View>
         </View>
         <Text style={styles.flightStatusTitle}>{status === 'Unknown' ? 'En attente de départ' : status.toUpperCase()}</Text>
-        <Text style={styles.flightLengthDescription}>{`${Math.round(Number(greatCircleDistance.km))} km en ${totalFlightHours}h${totalFlightMinutes} min`}</Text>
+        <Text style={styles.flightLengthDescription}>{`${Math.round(Number(distance))} km en ${totalFlightHours}h${totalFlightMinutes} min`}</Text>
         <View style={styles.routeContainer}>
 
           <View style={styles.locationContainerLeft}>
@@ -234,9 +217,9 @@ export default function TrackingScreen({ navigation }) {
         </View>
         <View style={styles.citiesContainer}>
           <View style={styles.cityContainer}>
-            <Text style={styles.city}>{departure.airport.municipalityName.length>8 ? `${departure.airport.municipalityName.slice(0,7)}...` : departure.airport.municipalityName}</Text>
-            <Text style={styles.aeroport}>{departure.airport.iata}</Text>
-            <Text style={styles.timezone}>{`UTC${departure.scheduledTime.local.slice(-6)}`}</Text>
+            <Text style={styles.city}>{departure.city.length>8 ? `${departure.city.slice(0,7)}...` : departure.city}</Text>
+            <Text style={styles.aeroport}>{departure.iata}</Text>
+            <Text style={styles.timezone}>{`UTC${departure.scheduledTimeLocal.slice(-6)}`}</Text>
           </View>
           <View style={styles.flightTicketsImgContainer}>
             <Image
@@ -245,34 +228,34 @@ export default function TrackingScreen({ navigation }) {
             />
           </View>
           <View style={styles.cityContainer}>
-            <Text style={styles.city}>{arrival.airport.municipalityName.length>8 ? `${arrival.airport.municipalityName.slice(0,7)}...` : arrival.airport.municipalityName}</Text>
-            <Text style={styles.aeroport}>{arrival.airport.iata}</Text>
-            <Text style={styles.timezone}>{`UTC${arrival.scheduledTime.local.slice(-6)}`}</Text>
+            <Text style={styles.city}>{arrival.city.length>8 ? `${arrival.city.slice(0,7)}...` : arrival.city}</Text>
+            <Text style={styles.aeroport}>{arrival.iata}</Text>
+            <Text style={styles.timezone}>{`UTC${arrival.scheduledTimeLocal.slice(-6)}`}</Text>
           </View>
         </View>
         <View style={styles.flightScheduleContainer}>
           <View style={styles.timeInfoContainer}>
             <Text style={styles.flightScheduleTitle}>Prévu</Text>
-            <Text style={styles.flightScheduleTime}>{departure.scheduledTime ? `${departure.scheduledTime.local.slice(11,16)}` : '-'}</Text>
+            <Text style={styles.flightScheduleTime}>{departure.scheduledTimeLocal ? `${departure.scheduledTimeLocal.slice(11,16)}` : '-'}</Text>
           </View>
           <View style={styles.timeInfoContainer}>
             <Text style={styles.flightScheduleTitle}>Prévu</Text>
             <View style={styles.localAndForeignTimeContainer}>
-              <Text style={styles.flightScheduleTime}>{arrival.scheduledTime ? `${arrival.scheduledTime.local.slice(11,16)}` : '-'}</Text>
-              <Text style={styles.flightScheduleLocalTime}>{arrival.scheduledTime ? `${moment(arrival.scheduledTime.local).toISOString().slice(11,16)} (${arrival.airport.countryCode})` : '-'}</Text>
+              <Text style={styles.flightScheduleTime}>{arrival.scheduledTimeLocal ? `${arrival.scheduledTimeLocal.slice(11,16)}` : '-'}</Text>
+              <Text style={styles.flightScheduleLocalTime}>{arrival.scheduledTimeLocal ? `${moment(arrival.scheduledTimelocal).toISOString().slice(11,16)} (${arrival.countryCode})` : '-'}</Text>
             </View>
           </View>
         </View>
         <View style={styles.flightScheduleContainer}>
           <View style={styles.timeInfoContainer}>
             <Text style={styles.flightScheduleTitle}>Réel</Text>
-            <Text style={styles.flightScheduleTime}>{departure.revisedTime ? `${departure.revisedTime.local.slice(11,16)}` : '-'}</Text>
+            <Text style={styles.flightScheduleTime}>{departure.revisedTimeLocal ? `${departure.revisedTimeLocal.slice(11,16)}` : '-'}</Text>
           </View>
           <View style={styles.timeInfoContainer}>
             <Text style={styles.flightScheduleTitle}>Estimé</Text>
             <View style={styles.localAndForeignTimeContainer}>
-              <Text style={styles.flightScheduleTime}>{arrival.revisedTime ? `${arrival.revisedTime.local.slice(11,16)}` : '-'}</Text>
-              <Text style={styles.flightScheduleLocalTime}>{arrival.revisedTime ? `${moment(arrival.revisedTime.local).toISOString().slice(11,16)} (${arrival.airport.countryCode})` : '-'}</Text>
+              <Text style={styles.flightScheduleTime}>{arrival.revisedTimeLocal ? `${arrival.revisedTime.local.slice(11,16)}` : '-'}</Text>
+              <Text style={styles.flightScheduleLocalTime}>{arrival.revisedTimeLocal ? `${moment(arrival.revisedTimeLocal).toISOString().slice(11,16)} (${arrival.countryCode})` : '-'}</Text>
             </View>
           </View>
         </View>

@@ -37,6 +37,8 @@ export default function SearchResultScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const flightData = useSelector((state) => state.flightsResult.value);
   const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
+
+  console.log('propss----->',flightData)
   //dispatch(emptyReducer())
 
   if(flightData.length>0){
@@ -60,7 +62,7 @@ export default function SearchResultScreen({ navigation }) {
       </View>
 
       <View style={styles.favoritesTripsContainer}>
-        <FlightCard flightData={flightCardData}/>
+        <FlightCard flightData={flightData}/>
       </View>
     </SafeAreaView>
   );
@@ -100,7 +102,7 @@ const styles = StyleSheet.create({
   favoritesTripsContainer: {
     width: "100%",
     alignItems: "center",
-    paddingTop: 10,
+    padding: 10,
   },
 });
 
