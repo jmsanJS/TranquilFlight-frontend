@@ -7,9 +7,13 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import moment from "moment";
 import "moment/locale/fr";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { celsiusToFahrenheit } from "../modules/settingsOptions";
 
 function WeatherCard(props) {
   const [weatherData, setWeatherData] = useState(null);
+
+  const settings = useSelector((state) => state.settings.value);
 
   // useEffect(() => {
   //   const fetchWeatherData = async () => {
@@ -29,11 +33,12 @@ function WeatherCard(props) {
 
   if (!weatherData) {
     return (
-    <View style={styles.downloadingWeatherDataContainer}>
-      <Text style={styles.downloadingWeatherData}>Chargement des données météorologiques...</Text>
-    </View>
-
-    )
+      <View style={styles.downloadingWeatherDataContainer}>
+        <Text style={styles.downloadingWeatherData}>
+          Chargement des données météorologiques...
+        </Text>
+      </View>
+    );
   }
 
   moment.locale("fr");
@@ -64,7 +69,16 @@ function WeatherCard(props) {
             style={styles.forcastWeatherIcon}
             alt="Icône de la météo"
           />
-          <Text style={styles.dayTemperature}>{Math.round(temperature)}°C</Text>
+          {settings.temperatureUnit === "°C" ? (
+            <Text style={styles.dayTemperature}>
+              {Math.round(temperature)}°C
+            </Text>
+          ) : (
+            <Text style={styles.dayTemperature}>
+              {celsiusToFahrenheit(temperature)}°F
+            </Text>
+          )}
+
           <Text style={styles.dayMiscInfo}>{wind.speed} m/s</Text>
           <Text style={styles.dayMiscInfo}>{cloud_cover.total}%</Text>
         </View>
@@ -81,9 +95,15 @@ function WeatherCard(props) {
               name="temperature-arrow-down"
               style={styles.temperatureIcons}
             />
-            <Text style={styles.specificWeatherInfo}>
-              {Math.round(temperature_min)}°C
-            </Text>
+            {settings.temperatureUnit === "°C" ? (
+              <Text style={styles.specificWeatherInfo}>
+                {Math.round(temperature_min)}°C
+              </Text>
+            ) : (
+              <Text style={styles.specificWeatherInfo}>
+                {celsiusToFahrenheit(temperature_min)}°F
+              </Text>
+            )}
           </View>
           <View style={styles.timeMiscInfoLeftContainer}>
             <FontAwesome6 name="wind" style={styles.temperatureIcons} />
@@ -96,10 +116,15 @@ function WeatherCard(props) {
             style={styles.todaysWeatherIcon}
             alt="Icône de la météo d'aujourd'hui"
           />
-
-          <Text style={styles.actualTemperature}>
-            {Math.round(temperature)}°C
-          </Text>
+          {settings.temperatureUnit === "°C" ? (
+            <Text style={styles.actualTemperature}>
+              {Math.round(temperature)}°C
+            </Text>
+          ) : (
+            <Text style={styles.actualTemperature}>
+              {celsiusToFahrenheit(temperature)}°F
+            </Text>
+          )}
         </View>
         <View style={styles.weatherHeaderRightContainer}>
           <Text style={styles.actualDate}>{formattedDate}</Text>
@@ -109,9 +134,15 @@ function WeatherCard(props) {
                 name="temperature-arrow-up"
                 style={styles.temperatureIcons}
               />
+            {settings.temperatureUnit === "°C" ? (
               <Text style={styles.specificWeatherInfo}>
                 {Math.round(temperature_max)}°C
               </Text>
+            ) : (
+              <Text style={styles.specificWeatherInfo}>
+                {celsiusToFahrenheit(temperature_max)}°F
+              </Text>
+            )}
             </View>
 
             <View style={styles.timeMiscInfoRightContainer}>
