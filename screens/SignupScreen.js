@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -7,14 +8,12 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
-import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
-
+import * as Crypto from "expo-crypto";
 import { colors } from "../assets/colors";
 import { backendURL } from "../assets/URLs";
-
-import * as Crypto from "expo-crypto";
 
 export default function SignupScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -120,100 +119,103 @@ export default function SignupScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={-20}
-      style={styles.container}
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "android" ? "height" : "padding"}
     >
-      <View style={styles.emailConnectContainer}>
-        <View style={styles.fieldContainer}>
-          <View style={styles.fieldSet}>
-            <Text style={styles.legend}>Prénom</Text>
-            <TextInput
-              cursorColor={colors.light1}
-              allowFontScaling={true}
-              style={styles.inputs}
-              onChangeText={(value) => setFirstname(value)}
-            ></TextInput>
+      <ScrollView
+        contentContainerStyle={styles.scrollViewContent}
+      >
+        <View style={styles.emailConnectContainer}>
+          <View style={styles.fieldContainer}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>Prénom</Text>
+              <TextInput
+                cursorColor={colors.light1}
+                allowFontScaling={true}
+                style={styles.inputs}
+                onChangeText={(value) => setFirstname(value)}
+              />
+            </View>
           </View>
-        </View>
-        <View style={styles.fieldContainer}>
-          <View style={styles.fieldSet}>
-            <Text style={styles.legend}>Nom de famille</Text>
-            <TextInput
-              cursorColor={colors.light1}
-              allowFontScaling={true}
-              style={styles.inputs}
-              onChangeText={(value) => setLastname(value)}
-            ></TextInput>
+          <View style={styles.fieldContainer}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>Nom de famille</Text>
+              <TextInput
+                cursorColor={colors.light1}
+                allowFontScaling={true}
+                style={styles.inputs}
+                onChangeText={(value) => setLastname(value)}
+              />
+            </View>
           </View>
-        </View>
-        <View style={styles.fieldContainer}>
-          <View style={styles.fieldSet}>
-            <Text style={styles.legend}>Email</Text>
-            <TextInput
-              cursorColor={colors.light1}
-              allowFontScaling={true}
-              keyboardType="email-address"
-              style={styles.inputs}
-              onChangeText={(value) => setEmail(value)}
-            ></TextInput>
+          <View style={styles.fieldContainer}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>Email</Text>
+              <TextInput
+                cursorColor={colors.light1}
+                allowFontScaling={true}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                style={styles.inputs}
+                onChangeText={(value) => setEmail(value)}
+              />
+            </View>
           </View>
-        </View>
-        <View style={styles.fieldContainer}>
-          <View style={styles.fieldSet}>
-            <Text style={styles.legend}>Mot de passe</Text>
-            <TextInput
-              cursorColor={colors.light1}
-              allowFontScaling={true}
-              secureTextEntry={true}
-              textContentType={"password"}
-              style={styles.inputs}
-              onChangeText={(value) => setPassword(value)}
-            ></TextInput>
+          <View style={styles.fieldContainer}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>Mot de passe</Text>
+              <TextInput
+                cursorColor={colors.light1}
+                autoCapitalize="none"
+                allowFontScaling={true}
+                secureTextEntry={true}
+                textContentType={"password"}
+                style={styles.inputs}
+                onChangeText={(value) => setPassword(value)}
+              />
+            </View>
           </View>
-        </View>
-        <View style={styles.fieldContainer}>
-          <View style={styles.fieldSet}>
-            <Text style={styles.legend}>Confirmez le mot de passe</Text>
-            <TextInput
-              cursorColor={colors.light1}
-              allowFontScaling={true}
-              secureTextEntry={true}
-              textContentType={"password"}
-              style={styles.inputs}
-              onChangeText={(value) => setCheckPassword(value)}
-            ></TextInput>
+          <View style={styles.fieldContainer}>
+            <View style={styles.fieldSet}>
+              <Text style={styles.legend}>Confirmez le mot de passe</Text>
+              <TextInput
+                cursorColor={colors.light1}
+                autoCapitalize="none"
+                allowFontScaling={true}
+                secureTextEntry={true}
+                textContentType={"password"}
+                style={styles.inputs}
+                onChangeText={(value) => setCheckPassword(value)}
+              />
+            </View>
           </View>
+          <View style={styles.errorMessageContainer}>
+            <Text style={styles.errorMessage}>{errorMessage}</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.loginBtn}
+            onPress={() => handleSubmit()}
+          >
+            <Text style={styles.loginBtnTxt}>Connexion</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.createAccount}
+            onPress={() => navigation.navigate("Connexion")}
+          >
+            <Text style={styles.createAccountTxt}>J'ai déjà un compte</Text>
+          </TouchableOpacity>
         </View>
-        <View style={styles.errorMessageContainer}>
-          <Text style={styles.errorMessage}>{errorMessage}</Text>
-        </View>
-        <TouchableOpacity
-          style={styles.loginBtn}
-          onPress={() => handleSubmit()}
-        >
-          <Text style={styles.loginBtnTxt}>Connexion</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.createAccount}
-          onPress={() => navigation.navigate("Connexion")}
-        >
-          <Text style={styles.createAccountTxt}>J'ai déjà un compte</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+  scrollViewContent: {
+    flexGrow: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.lightGrey,
-    marginTop: -30,
-    overflow: "scroll",
+    paddingVertical: 20,
   },
   emailConnectContainer: {
     flex: 1,
