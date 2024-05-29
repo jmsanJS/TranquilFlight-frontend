@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { celsiusToFahrenheit } from "../modules/settingsOptions";
 
 function WeatherCard(props) {
+  const flightDataTracking = useSelector((state) => state.flightDataTracking.value);
   const [weatherData, setWeatherData] = useState(null);
 
   const settings = useSelector((state) => state.settings.value);
@@ -18,7 +19,7 @@ function WeatherCard(props) {
   // useEffect(() => {
   //   const fetchWeatherData = async () => {
   //     try {
-  //       const weatherDataResponse = await fetch(`${backendURL}/weather/Lyon`);
+  //       const weatherDataResponse = await fetch(`${backendURL}/weather/${props.city}`);
   //       if (!weatherDataResponse.ok) {
   //         throw new Error(`HTTP error! Status: ${weatherDataResponse.status}`);
   //       }

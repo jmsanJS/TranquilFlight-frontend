@@ -256,8 +256,7 @@ export default function TrackingScreen({ navigation }) {
           </View>
         </View>
       </View> : null}
-      
-      <WeatherCard />
+      {flightData.status ? <WeatherCard city={flightData.arrival.city} /> : null}
     </View>
   );
 }
