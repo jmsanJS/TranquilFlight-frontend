@@ -45,7 +45,6 @@ function FlightCard(props) {
 
   }, [favoriteFlights, props.flightData]);
 
-
   const handleNotificationClick = () => {
     console.log("notification");
   };
@@ -57,16 +56,21 @@ function FlightCard(props) {
         fetch(`${backendURL}/user/favorite`,{
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ flightNumber:props.flightData.flightNumber ,flightData: props.flightData, email: user.email, token: user.token }),
+          body: JSON.stringify({ flightData: props.flightData, email: user.email, token: user.token }),
         })
         .then((response) => response.json())
-        .then(dispatch(addFavorite(props.flightData)))
+        .then(data => {
+          console.log('data de la BDD---->',props.flightData)
+          dispatch(addFavorite(props.flightData))
+        }
+          
+          )
   
       } else {
         fetch(`${backendURL}/user/favorite`,{
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ flightNumber: props.flightData.number, email: user.email, token: user.token }),
+          body: JSON.stringify({ flightNumber: props.flightData.flightNumber, email: user.email, token: user.token }),
         })
         .then((response) => response.json())
         .then(()=>{
@@ -90,7 +94,7 @@ function FlightCard(props) {
 
   const handleFlightCardClick = async () => {
     dispatch(emptyFlight())
-    dispatch(addFlight({flightNumber:props.flightData.number , date:props.flightData.departure.scheduledTimeLocal.slice(0,10)}))
+    dispatch(addFlight({flightNumber:props.flightData.flightNumber , date:props.flightData.departure.scheduledTimeLocal.slice(0,10)}))
     navigation.navigate('Suivi du vol')
   }
 

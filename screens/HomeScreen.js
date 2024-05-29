@@ -36,9 +36,10 @@ export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
 
   //dispatch(emptyReducer())
-  //dispatch(emptyFlight())
+  //dispatch(emptyFlight()) 
 
   const user = useSelector((state) => state.user.value);
+  const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -54,7 +55,6 @@ export default function HomeScreen({ navigation }) {
           });
           const data = await response.json();
           if (data.result) {
-            console.log("data ==>", data);
             dispatch(updateTimeFormat(data.userData.timeFormat));
             dispatch(updateDistanceUnit(data.userData.distUnit));
             dispatch(updateTemperatureUnit(data.userData.tempUnit));
