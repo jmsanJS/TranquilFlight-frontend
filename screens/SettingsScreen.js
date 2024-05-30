@@ -17,11 +17,10 @@ export default function SettingsScreen({ navigation }) {
   const settings = useSelector((state) => state.settings.value);
   const user = useSelector((state) => state.user.value);
 
-  console.log("2. settings ==>", settings);
-  console.log("3. user", user);
 
   useEffect(() => {
     const fetchSettings = async () => {
+      console.log("triggered")
       if (user.token !== null) {
         try {
           const response = await fetch(`${backendURL}/user/settings`, {
@@ -45,7 +44,6 @@ export default function SettingsScreen({ navigation }) {
         }
       } else {
         dispatch(resetSettingsReducer());
-        console.log("1. L'utilisateur n'est pas connecté.");
       }
     };
 

@@ -63,7 +63,7 @@ const SettingsStack = createNativeStackNavigator();
 function AccountStackScreen() {
   const userReducer = useSelector((state) => state.user.value);
 
-  console.log(userReducer);
+  console.log('là?',userReducer);
   return (
     <AccountStack.Navigator
       screenOptions={({ route }) => ({

@@ -18,6 +18,7 @@ import * as Crypto from "expo-crypto";
 
 import { useDispatch, useSelector } from "react-redux";
 import { updateEmail, logout } from "../reducers/user";
+import { emptyReducer } from "../reducers/favoriteFlights";
 
 export default function AccountScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -175,8 +176,14 @@ export default function AccountScreen({ navigation }) {
   };
 
   const handleLogoutAccount = () => {
+    console.log('<------Logout------>')
     dispatch(logout());
-    navigation.navigate("Home");
+      dispatch(emptyReducer())
+    setTimeout(function(){
+      navigation.navigate("Home");
+    }, 200);
+    
+    
   };
 
   const deleteAcountAlert = () =>
