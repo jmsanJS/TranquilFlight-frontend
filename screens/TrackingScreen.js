@@ -10,27 +10,23 @@ import {
 
 import { colors } from "../assets/colors";
 import { backendURL } from "../assets/URLs";
-import weatherIcons from "../assets/weatherIcons";
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import moment from "moment";
 import "moment/locale/fr";
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavorite, removeFavorite } from "../reducers/favoriteFlights";
-import flightsResult from "../reducers/flightsResult";
 import WeatherCard from "../components/WeatherCard";
 import { kilometersToMiles } from "../modules/settingsOptions";
-
 
 export default function TrackingScreen({ navigation }) {
   const user = useSelector((state) => state.user.value);
   const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
-  const settings = useSelector(state => state.settings.value);
+  const settings = useSelector((state) => state.settings.value);
   const flightDataTracking = useSelector(
     (state) => state.flightDataTracking.value
   );
@@ -68,13 +64,13 @@ export default function TrackingScreen({ navigation }) {
           let departureTime = moment(data.flightData.departure.revisedTimeUTC);
           let arrivalTime = moment(data.flightData.arrival.revisedTimeUTC);
           if (!lastUpdate.isValid()) {
-            lastUpdate = moment(data.flightData.departure.revisedTimeLocal);
+            lastUpdate = moment(data.flightData.departure.revisedTimeUTC);
             if (!lastUpdate.isValid()) {
-              lastUpdate = moment(data.flightData.departure.scheduledTimeLocal);
+              lastUpdate = moment(data.flightData.departure.scheduledTimeUTC);
             }
           }
           if (!departureTime.isValid()) {
-            departureTime = moment(data.flightData.departure.scheduledTimeLocal);
+            departureTime = moment(data.flightData.departure.scheduledTimeUTC);
           }
           if (!arrivalTime.isValid()) {
             arrivalTime = moment(data.flightData.arrival.scheduledTimeUTC);
@@ -84,6 +80,10 @@ export default function TrackingScreen({ navigation }) {
           );
           setFromDepartureHours(flightDuration.hours());
           setFromDepartureMinutes(flightDuration.minutes());
+          if (flightDuration <= 0) {
+            setFromDepartureHours(0);
+            setFromDepartureMinutes(0);
+          }
 
           const remainingFlightDuration = moment.duration(
             arrivalTime.diff(lastUpdate)
@@ -103,10 +103,18 @@ export default function TrackingScreen({ navigation }) {
           const totalFlightDurationInMinutes = moment
             .duration(arrivalTime.diff(departureTime))
             .asMinutes();
-
+          console.log(
+            "totalFlightDurationInMinutes ==>",
+            totalFlightDurationInMinutes
+          );
+          console.log("flightDurationInMunutes ==>", flightDurationInMunutes);
+          console.log("lastUpdate", lastUpdate, "departureTime", departureTime);
           if (lastUpdate > arrivalTime) {
             setDepartureLength("90");
             setArrivalLength("0");
+          } else if (lastUpdate < departureTime) {
+            setDepartureLength("0");
+            setArrivalLength("90");
           } else {
             setDepartureLength(
               `${Math.round(
@@ -182,9 +190,9 @@ export default function TrackingScreen({ navigation }) {
     }
   };
 
-  let iconStyle = { color: "grey", marginLeft: 12 };
+  let iconStyle = { color: colors.dark1, marginLeft: 12 };
   if (isFavorited) {
-    iconStyle = { color: "red", marginLeft: 12 };
+    iconStyle = { color: colors.hot1, marginLeft: 12 };
   }
 
   return (
@@ -224,17 +232,24 @@ export default function TrackingScreen({ navigation }) {
                 Number(distance)
               )} km en ${totalFlightHours}h${totalFlightMinutes} min`}</Text>
             ) : (
-              <Text style={styles.flightLengthDescription}>{`${
-                kilometersToMiles(Number(distance)
-              )} milles en ${totalFlightHours}h${totalFlightMinutes} min`}</Text>
-            )
-          }
+              <Text
+                style={styles.flightLengthDescription}
+              >{`${kilometersToMiles(
+                Number(distance)
+              )} miles en ${totalFlightHours}h${totalFlightMinutes} min`}</Text>
+            )}
             <View style={styles.routeContainer}>
               <View style={styles.locationContainerLeft}>
                 <FontAwesome6 name="location-dot" style={styles.locationDots} />
-                <Text
-                  style={styles.sinceDeparture}
-                >{`${fromDepartureHours}h${fromDepartureMinutes} min depuis départ`}</Text>
+                {fromDepartureMinutes < 0 ? (
+                  <Text
+                    style={styles.sinceDeparture}
+                  >{`0h0min en attente`}</Text>
+                ) : (
+                  <Text
+                    style={styles.sinceDeparture}
+                  >{`${fromDepartureHours}h${fromDepartureMinutes} min depuis départ`}</Text>
+                )}
               </View>
 
               <View style={styles.routeLineAndPlaneContainer}>
@@ -358,11 +373,11 @@ export default function TrackingScreen({ navigation }) {
                   )}
                   {arrival.revisedTimeLocal && (
                     <Text style={styles.flightScheduleLocalTime}>
-                      ? `$
+                      ?
                       {moment(arrival.revisedTimeLocal)
                         .toISOString()
                         .slice(11, 16)}{" "}
-                      (${arrival.countryCode})`
+                      (${arrival.countryCode})
                     </Text>
                   )}
                 </View>
@@ -408,7 +423,7 @@ const styles = StyleSheet.create({
   flightNumberContainer: {
     width: "50%",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   flightNumber: {
     fontSize: 18,
