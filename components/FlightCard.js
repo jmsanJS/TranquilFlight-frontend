@@ -14,6 +14,8 @@ import moment from 'moment';
 
 function FlightCard(props) {
 
+  console.log(props)
+
   const navigation = useNavigation();
 
   const user = useSelector((state) => state.user.value);

@@ -38,7 +38,9 @@ export default function SearchResultScreen({ navigation }) {
   const flightData = useSelector((state) => state.flightsResult.value);
   const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
 
-  if(flightData.length>0){
+  console.log('<------test------>', flightData.airline)
+
+  if(flightData.airline){
     setFlightCardData(flightData) 
     dispatch(removeFlight());
   }
@@ -59,7 +61,8 @@ export default function SearchResultScreen({ navigation }) {
       </View>
 
       <View style={styles.favoritesTripsContainer}>
-        <FlightCard flightData={flightData}/>
+        {flightCardData ? <FlightCard flightData={flightCardData}/> : null}
+        
       </View>
     </SafeAreaView>
   );
