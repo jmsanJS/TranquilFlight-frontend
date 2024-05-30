@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 20,
+    backgroundColor:colors.lightGrey,
   },
   emailConnectContainer: {
     flex: 1,
