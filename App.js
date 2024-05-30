@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, LogBox } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -32,6 +32,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch, useSelector } from "react-redux";
 
+LogBox.ignoreAllLogs();
+
 const reducers = combineReducers({
   user,
   flightsResult,
@@ -63,7 +65,6 @@ const SettingsStack = createNativeStackNavigator();
 function AccountStackScreen() {
   const userReducer = useSelector((state) => state.user.value);
 
-  console.log('là?',userReducer);
   return (
     <AccountStack.Navigator
       screenOptions={({ route }) => ({

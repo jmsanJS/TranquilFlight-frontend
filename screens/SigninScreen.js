@@ -42,7 +42,6 @@ export default function SigninScreen({ navigation }) {
   };
 
   const handleSubmit = async () => {
-    console.log('<------signin------>')
     const hashedPassword = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA256,
       password

@@ -14,8 +14,6 @@ import moment from 'moment';
 
 function FlightCard(props) {
 
-  console.log(props)
-
   const navigation = useNavigation();
 
   const user = useSelector((state) => state.user.value);
@@ -62,7 +60,6 @@ function FlightCard(props) {
         })
         .then((response) => response.json())
         .then(data => {
-          console.log('data de la BDD---->',props.flightData)
           dispatch(addFavorite(props.flightData))
         }
           
@@ -89,15 +86,16 @@ function FlightCard(props) {
     }
   };
 
-  let iconStyle = { color: 'grey', marginLeft: 10 };
+  let iconStyle = { color: colors.dark1, marginLeft: 10 };
   if (isFavorited) {
-    iconStyle = { color: 'red', marginLeft: 10 };
+    iconStyle = { color: colors.hot1, marginLeft: 10 };
   }
 
   const handleFlightCardClick = async () => {
     dispatch(emptyFlight())
     dispatch(addFlight({flightNumber:props.flightData.flightNumber , date:props.flightData.departure.scheduledTimeLocal.slice(0,10)}))
-    navigation.navigate('Suivi du vol')
+    //navigation.navigate('Suivi du vol')
+    navigation.navigate( {name: 'Suivi du vol'})
   }
 
   return (
@@ -125,7 +123,9 @@ function FlightCard(props) {
       <View style={styles.favoriteTripDescriptionContainer}>
         <View style={styles.departureInfo}>
           <Text style={styles.departureTime}>{props.flightData.departure.scheduledTimeLocal.slice(11, 16)}</Text>
-          <Text style={styles.departureCity}>{props.flightData.departure.city}</Text>
+          <Text style={styles.departureCity}>{props.flightData.departure.city.length > 8
+                    ? `${props.flightData.departure.city.slice(0, 7)}...`
+                    : props.flightData.departure.city}</Text>
           <Text style={styles.departureAirportCode}>{props.flightData.departure.iata}</Text>
         </View>
         <View style={styles.routeLineContainer}>
@@ -142,7 +142,9 @@ function FlightCard(props) {
         </View>
         <View style={styles.arrivalInfo}>
           <Text style={styles.arrivalTime}>{props.flightData.arrival.scheduledTimeLocal.slice(11, 16)}</Text>
-          <Text style={styles.arrivalCity}>{props.flightData.arrival.city}</Text>
+          <Text style={styles.arrivalCity}>{props.flightData.arrival.city.length > 8
+                    ? `${props.flightData.arrival.city.slice(0, 7)}...`
+                    : props.flightData.arrival.city}</Text>
           <Text style={styles.arrivalAirportCode}>{props.flightData.arrival.iata}</Text>
         </View>
       </View>

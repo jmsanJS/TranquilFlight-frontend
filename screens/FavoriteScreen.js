@@ -48,7 +48,6 @@ export default function MyFlightsScreen({navigation}) {
     
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Mes vols favoris</Text>
             {favoriteFlights.length>0 ?
             favoriteFlights.map( (item, i) => {
                 return <FlightCard key={i} flightData={item} ></FlightCard>

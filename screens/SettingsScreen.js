@@ -20,7 +20,6 @@ export default function SettingsScreen({ navigation }) {
 
   useEffect(() => {
     const fetchSettings = async () => {
-      console.log("triggered")
       if (user.token !== null) {
         try {
           const response = await fetch(`${backendURL}/user/settings`, {
@@ -33,7 +32,6 @@ export default function SettingsScreen({ navigation }) {
           });
           const data = await response.json();
           if (data.result) {
-            console.log("data ==>", data);
             dispatch(updateTimeFormat(data.userData.timeFormat));
             dispatch(updateDistanceUnit(data.userData.distUnit));
             dispatch(updateTemperatureUnit(data.userData.tempUnit));
@@ -66,12 +64,10 @@ export default function SettingsScreen({ navigation }) {
           }),
         });
         const data = await response.json();
-        console.log("data.data", data.data.settings);
       } catch (error) {
         console.error("Error updating settings:", error);
       }
     } else {
-      console.log("4. Je suis déconnecté");
     }
   };
 

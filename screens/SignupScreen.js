@@ -39,7 +39,6 @@ export default function SignupScreen({ navigation }) {
   };
 
   const handleSubmit = async () => {
-    console.log('<------signout------>')
     if (
       firstname === "" ||
       lastname === "" ||

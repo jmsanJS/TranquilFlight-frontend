@@ -58,7 +58,6 @@ export default function TrackingScreen({ navigation }) {
 
         if (data.result) {
           setFlightData(data.flightData);
-          console.log("data.flightData---->", flightData);
 
           const isFavorite = favoriteFlights.some(
             (favorite) => favorite.flightNumber === data.flightData.flightNumber
@@ -80,8 +79,6 @@ export default function TrackingScreen({ navigation }) {
           if (!arrivalTime.isValid()) {
             arrivalTime = moment(data.flightData.arrival.scheduledTimeUTC);
           }
-          console.log("lastUpdate ===>", lastUpdate)
-          console.log("arrivalTime ===>", arrivalTime)
           const flightDuration = moment.duration(
             lastUpdate.diff(departureTime)
           );
@@ -159,7 +156,6 @@ export default function TrackingScreen({ navigation }) {
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log("data de la BDD---->", flightData);
             dispatch(addFavorite(flightData));
           });
       } else {

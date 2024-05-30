@@ -112,7 +112,6 @@ export default function AccountScreen({ navigation }) {
         .toLowerCase()
         .match(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)
     ) {
-      console.log("ok");
       setSuccessMessagePassword("");
       setErrorMessagePassword(
         "Le mot de passe doit contenir au moins 8 caractères dont une lettre, un numéro et un caractère spécial"
@@ -176,7 +175,6 @@ export default function AccountScreen({ navigation }) {
   };
 
   const handleLogoutAccount = () => {
-    console.log('<------Logout------>')
     dispatch(logout());
       dispatch(emptyReducer())
     setTimeout(function(){

@@ -38,7 +38,6 @@ export default function SearchResultScreen({ navigation }) {
   const flightData = useSelector((state) => state.flightsResult.value);
   const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
 
-  console.log('<------test------>', flightData.airline)
 
   if(flightData.airline){
     setFlightCardData(flightData) 
