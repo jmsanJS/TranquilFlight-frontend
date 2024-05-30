@@ -199,7 +199,7 @@ export default function SignupScreen({ navigation }) {
             style={styles.loginBtn}
             onPress={() => {handleSubmit(); }}
           >
-            <Text style={styles.loginBtnTxt}>Connexion</Text>
+            <Text style={styles.loginBtnTxt}>Inscription</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.createAccount}

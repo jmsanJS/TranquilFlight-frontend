@@ -294,6 +294,7 @@ export default function AccountScreen({ navigation }) {
               <TextInput
                 textContentType={"password"}
                 secureTextEntry={true}
+                autoCapitalize="none"
                 cursorColor={colors.light1}
                 allowFontScaling={true}
                 style={styles.inputs}
@@ -307,6 +308,7 @@ export default function AccountScreen({ navigation }) {
               <TextInput
                 textContentType={"password"}
                 secureTextEntry={true}
+                autoCapitalize="none"
                 cursorColor={colors.light1}
                 allowFontScaling={true}
                 style={styles.inputs}
@@ -322,6 +324,7 @@ export default function AccountScreen({ navigation }) {
               <TextInput
                 textContentType={"password"}
                 secureTextEntry={true}
+                autoCapitalize="none"
                 cursorColor={colors.light1}
                 allowFontScaling={true}
                 style={styles.inputs}

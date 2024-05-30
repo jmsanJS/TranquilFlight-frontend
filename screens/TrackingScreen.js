@@ -148,6 +148,12 @@ export default function TrackingScreen({ navigation }) {
     fetchFlightData(flightDataTracking);
   }, []);
 
+  const formatTime = (time) => {
+    return settings.timeFormat === "12h"
+      ? moment(time).format('hh:mm a')
+      : moment(time).format('HH:mm');
+  };
+
   var { status, departure, arrival, distance } = flightData;
 
   const handleFavoriteClick = () => {
@@ -324,7 +330,7 @@ export default function TrackingScreen({ navigation }) {
                 <Text style={styles.flightScheduleTitle}>Prévu</Text>
                 <Text style={styles.flightScheduleTime}>
                   {departure.scheduledTimeLocal
-                    ? `${departure.scheduledTimeLocal.slice(11, 16)}`
+                    ? formatTime(departure.scheduledTimeLocal)
                     : "-"}
                 </Text>
               </View>
@@ -333,14 +339,19 @@ export default function TrackingScreen({ navigation }) {
                 <View style={styles.localAndForeignTimeContainer}>
                   <Text style={styles.flightScheduleTime}>
                     {arrival.scheduledTimeLocal
-                      ? `${arrival.scheduledTimeLocal.slice(11, 16)}`
+                      ? formatTime(arrival.scheduledTimeLocal)
                       : "-"}
                   </Text>
-                  <Text style={styles.flightScheduleLocalTime}>
+                  {/* <Text style={styles.flightScheduleLocalTime}>
                     {arrival.scheduledTimeLocal
                       ? `${moment(arrival.scheduledTimelocal)
                           .toISOString()
                           .slice(11, 16)} (${arrival.countryCode})`
+                      : "-"}
+                  </Text> */}
+                  <Text style={styles.flightScheduleLocalTime}>
+                    {arrival.scheduledTimeLocal
+                      ? `${formatTime(arrival.scheduledTimelocal)} (${arrival.countryCode})`
                       : "-"}
                   </Text>
                 </View>
@@ -351,7 +362,7 @@ export default function TrackingScreen({ navigation }) {
                 <Text style={styles.flightScheduleTitle}>Réel</Text>
                 {departure.revisedTimeLocal ? (
                   <Text style={styles.flightScheduleTime}>
-                    {departure.revisedTimeLocal.slice(11, 16)}
+                    {formatTime(departure.revisedTimeLocal)}
                   </Text>
                 ) : (
                   <Text style={styles.flightScheduleTimeUnknown}>
@@ -364,7 +375,7 @@ export default function TrackingScreen({ navigation }) {
                 <View style={styles.localAndForeignTimeContainer}>
                   {arrival.revisedTimeLocal ? (
                     <Text style={styles.flightScheduleTime}>
-                      {arrival.revisedTimeLocal.slice(11, 16)}
+                      {formatTime(arrival.revisedTimeLocal)}
                     </Text>
                   ) : (
                     <Text style={styles.flightScheduleTimeUnknown}>
