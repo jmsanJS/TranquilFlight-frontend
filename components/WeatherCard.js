@@ -11,7 +11,9 @@ import { useSelector } from "react-redux";
 import { celsiusToFahrenheit } from "../modules/settingsOptions";
 
 function WeatherCard(props) {
-  const flightDataTracking = useSelector((state) => state.flightDataTracking.value);
+  const flightDataTracking = useSelector(
+    (state) => state.flightDataTracking.value
+  );
   const [weatherData, setWeatherData] = useState(null);
 
   const settings = useSelector((state) => state.settings.value);
@@ -19,7 +21,9 @@ function WeatherCard(props) {
   // useEffect(() => {
   //   const fetchWeatherData = async () => {
   //     try {
-  //       const weatherDataResponse = await fetch(`${backendURL}/weather/${props.city}`);
+  //       const weatherDataResponse = await fetch(
+  //         `${backendURL}/weather/${props.city}`
+  //       );
   //       if (!weatherDataResponse.ok) {
   //         throw new Error(`HTTP error! Status: ${weatherDataResponse.status}`);
   //       }
@@ -80,8 +84,26 @@ function WeatherCard(props) {
             </Text>
           )}
 
-          <Text style={styles.dayMiscInfo}>{wind.speed} m/s</Text>
-          <Text style={styles.dayMiscInfo}>{cloud_cover.total}%</Text>
+          {settings.temperatureUnit === "°C" ? (
+            <Text style={styles.dayMiscInfo}>
+              {Math.round(temperature_min)}°C
+            </Text>
+          ) : (
+            <Text style={styles.dayTemperature}>
+              {celsiusToFahrenheit(temperature_min)}°F
+            </Text>
+          )}
+          {settings.temperatureUnit === "°C" ? (
+            <Text style={styles.dayMiscInfo}>
+              {Math.round(temperature_max)}°C
+            </Text>
+          ) : (
+            <Text style={styles.dayTemperature}>
+              {celsiusToFahrenheit(temperature_max)}°F
+            </Text>
+          )}
+          {/* <Text style={styles.dayMiscInfo}>{temperature_min}°C</Text>
+          <Text style={styles.dayMiscInfo}>{temperature_max}°C</Text> */}
         </View>
       );
     }
@@ -106,10 +128,7 @@ function WeatherCard(props) {
               </Text>
             )}
           </View>
-          <View style={styles.timeMiscInfoLeftContainer}>
-            <FontAwesome6 name="wind" style={styles.temperatureIcons} />
-            <Text style={styles.specificWeatherInfo}>{wind.speed} m/s</Text>
-          </View>
+
         </View>
         <View style={styles.weatherHeaderCenterContainer}>
           <Image
@@ -135,25 +154,15 @@ function WeatherCard(props) {
                 name="temperature-arrow-up"
                 style={styles.temperatureIcons}
               />
-            {settings.temperatureUnit === "°C" ? (
-              <Text style={styles.specificWeatherInfo}>
-                {Math.round(temperature_max)}°C
-              </Text>
-            ) : (
-              <Text style={styles.specificWeatherInfo}>
-                {celsiusToFahrenheit(temperature_max)}°F
-              </Text>
-            )}
-            </View>
-
-            <View style={styles.timeMiscInfoRightContainer}>
-              <MaterialCommunityIcons
-                name="cloud-outline"
-                style={styles.weatherIcons}
-              />
-              <Text style={styles.specificWeatherInfo}>
-                {cloud_cover.total}%
-              </Text>
+              {settings.temperatureUnit === "°C" ? (
+                <Text style={styles.specificWeatherInfo}>
+                  {Math.round(temperature_max)}°C
+                </Text>
+              ) : (
+                <Text style={styles.specificWeatherInfo}>
+                  {celsiusToFahrenheit(temperature_max)}°F
+                </Text>
+              )}
             </View>
           </View>
         </View>
@@ -215,7 +224,7 @@ const styles = StyleSheet.create({
     color: colors.dark1,
   },
   actualTemperature: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "600",
     color: colors.dark1,
     textAlign: "center",
