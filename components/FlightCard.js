@@ -121,8 +121,8 @@ function FlightCard(props) {
 
   // à modifier
   const currentDay = props.flightData.departure.scheduledTimeLocal;
-  const formattedDate = moment(currentDay.day).format("ddd, DD MMM YYYY");
-
+  const formattedDate = moment(currentDay).format("DD MMM YYYY");
+  console.log("currentday", currentDay)
   return (
     <TouchableOpacity
       onPress={() => handleFlightCardClick()}
@@ -136,7 +136,7 @@ function FlightCard(props) {
           <Text style={styles.companyText}>{props.flightData.airline}</Text>
         </View>
         <Text style={styles.date}>
-          {props.flightData.departure.scheduledTimeLocal.slice(0, 10)}
+          {formattedDate}
         </Text>
         <View style={styles.icons}>
           <TouchableOpacity onPress={handleNotificationClick}>

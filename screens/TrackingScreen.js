@@ -103,12 +103,7 @@ export default function TrackingScreen({ navigation }) {
           const totalFlightDurationInMinutes = moment
             .duration(arrivalTime.diff(departureTime))
             .asMinutes();
-          console.log(
-            "totalFlightDurationInMinutes ==>",
-            totalFlightDurationInMinutes
-          );
-          console.log("flightDurationInMunutes ==>", flightDurationInMunutes);
-          console.log("lastUpdate", lastUpdate, "departureTime", departureTime);
+
           if (lastUpdate > arrivalTime) {
             setDepartureLength("90");
             setArrivalLength("0");
@@ -139,7 +134,6 @@ export default function TrackingScreen({ navigation }) {
           navigation.navigate("Recherche");
         }
       } catch (error) {
-        console.error("Une erreur s'est produite:", error);
         alert("Une erreur s'est produite, merci de ré-essayer");
         navigation.navigate("Recherche");
       }
@@ -351,7 +345,7 @@ export default function TrackingScreen({ navigation }) {
                   </Text> */}
                   <Text style={styles.flightScheduleLocalTime}>
                     {arrival.scheduledTimeLocal
-                      ? `${formatTime(arrival.scheduledTimelocal)} (${arrival.countryCode})`
+                      ? `${formatTime(arrival.scheduledTimeUTC)} (${arrival.countryCode})`
                       : "-"}
                   </Text>
                 </View>
@@ -385,9 +379,7 @@ export default function TrackingScreen({ navigation }) {
                   {arrival.revisedTimeLocal && (
                     <Text style={styles.flightScheduleLocalTime}>
                       ?
-                      {moment(arrival.revisedTimeLocal)
-                        .toISOString()
-                        .slice(11, 16)}{" "}
+                      {formatTime(arrival.revisedTimeLocal)}{" "}
                       (${arrival.countryCode})
                     </Text>
                   )}
