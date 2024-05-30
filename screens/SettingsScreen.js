@@ -103,7 +103,7 @@ export default function SettingsScreen({ navigation }) {
             option1={"24h"}
             option2={"12h"}
             onSelectSwitch={handleTimeFormatSwitch}
-            selectionColor={colors.dark2}
+            selectionColor={colors.light1}
           />
         </View>
         <View style={styles.settingRowContainer}>
@@ -115,7 +115,7 @@ export default function SettingsScreen({ navigation }) {
             option1={"km"}
             option2={"miles"}
             onSelectSwitch={handleDistanceUnitSwitch}
-            selectionColor={colors.dark2}
+            selectionColor={colors.light1}
           />
         </View>
         <View style={styles.settingRowContainer}>
@@ -127,7 +127,7 @@ export default function SettingsScreen({ navigation }) {
             option1={"°C"}
             option2={"°F"}
             onSelectSwitch={handleTemperatureUnitSwitch}
-            selectionColor={colors.dark2}
+            selectionColor={colors.light1}
           />
         </View>
         <View style={styles.settingRowContainer}>
@@ -139,7 +139,7 @@ export default function SettingsScreen({ navigation }) {
             option1={"on"}
             option2={"off"}
             onSelectSwitch={handleNotificationsSwitch}
-            selectionColor={colors.dark2}
+            selectionColor={colors.light1}
           />
         </View>
       </View>

@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
   },
   validButton: {
     width: "80%",
-    backgroundColor: colors.dark1,
+    backgroundColor: colors.light1,
     borderRadius: 5,
     justifyContent: "center",
     alignItems: "center",
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
   },
   deleteAccountTxt: {
     textDecorationLine: "underline",
-    color: colors.dark1,
+    color: colors.light1,
   },
   errorMessageContainer: {
     width: "80%",

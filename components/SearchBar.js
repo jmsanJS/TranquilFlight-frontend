@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     },
     searchBtn: {
         width: "80%",
-        backgroundColor: colors.hot1,
+        backgroundColor: colors.light1,
         borderRadius: 5,
         justifyContent: "center",
         alignItems: "center",

@@ -138,8 +138,11 @@ const styles = StyleSheet.create({
   },
   welcomeUserIfConnected: {
     margin: 20,
-    color: "white",
+    color: colors.lightGrey,
     fontSize: 25,
+    alignSelf:'flex-end',
+    fontWeight:'600',
+    fontFamily:'sans-serif-thin'
   },
   KeyboardAvoid: {
     width: "100%",
