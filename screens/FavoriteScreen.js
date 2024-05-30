@@ -22,8 +22,6 @@ export default function MyFlightsScreen({navigation}) {
     const user = useSelector((state) => state.user.value);
     const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
 
-    console.log('favoriteScreen, favoriteFlights---->', favoriteFlights)
-
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -40,7 +38,6 @@ export default function MyFlightsScreen({navigation}) {
                     dispatch(emptyReducer())
                     
                     for (let favorite of data.favorites){
-                        console.log('favorite from favoriteScreen',favorite)
                         dispatch(addFavorite(favorite.flightData))
                     }
                 }
