@@ -16,22 +16,24 @@ It was entirely created by a group of two developers ([medkar](https://github.co
   - Redux (toolkit)
   - Expo v. 51.0.8
 
+Click [here](https://github.com/jmsanJS/TranquilFlight-backend) to visit the backend repository.
+
 ### Visual examples of the app :
 
 HomeScreen
-![HomeScreen](/frontend/assets/screenshots/home-screen.jpg)
+![HomeScreen](/assets/screenshots/home-screen.jpg)
 SearchResultScreen
-![SearchResultScreen](/frontend/assets/screenshots/search-screen.jpg)
+![SearchResultScreen](/assets/screenshots/search-screen.jpg)
 TrackingScreen
-![TrackingScreen](/frontend/assets/screenshots/tracking-screen.jpg)
+![TrackingScreen](/assets/screenshots/tracking-screen.jpg)
 FavoriteScreen
-![FavoriteScreen](/frontend/assets/screenshots/favorites-screen-2.jpg)
+![FavoriteScreen](/assets/screenshots/favorites-screen-2.jpg)
 SinginScreen
-![SinginScreen](/frontend/assets/screenshots/sign-in-screen.jpg)
+![SinginScreen](/assets/screenshots/sign-in-screen.jpg)
 SignupScreen
-![SignupScreen](/frontend/assets/screenshots/sign-up-screen.jpg)
+![SignupScreen](/assets/screenshots/sign-up-screen.jpg)
 AccountScreen
-![AccountScreen(1/2)](/frontend/assets/screenshots/account-screen.jpg)
-![AccountScreen(2/2)](/frontend/assets/screenshots/account-screen-2.jpg)
+![AccountScreen(1/2)](/assets/screenshots/account-screen.jpg)
+![AccountScreen(2/2)](/assets/screenshots/account-screen-2.jpg)
 SettingsScreen
-![SettingsScreen](/frontend/assets/screenshots/settings-screen.jpg)
+![SettingsScreen](/assets/screenshots/settings-screen.jpg)
