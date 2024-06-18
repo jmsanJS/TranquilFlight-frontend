@@ -20,20 +20,36 @@ Click [here](https://github.com/jmsanJS/TranquilFlight-backend) to visit the bac
 
 ### Visual examples of the app :
 
-HomeScreen
-![HomeScreen](/assets/screenshots/home-screen.jpg)
-SearchResultScreen
-![SearchResultScreen](/assets/screenshots/search-screen.jpg)
-TrackingScreen
-![TrackingScreen](/assets/screenshots/tracking-screen.jpg)
-FavoriteScreen
-![FavoriteScreen](/assets/screenshots/favorites-screen-2.jpg)
-SinginScreen
-![SinginScreen](/assets/screenshots/sign-in-screen.jpg)
-SignupScreen
-![SignupScreen](/assets/screenshots/sign-up-screen.jpg)
-AccountScreen
-![AccountScreen(1/2)](/assets/screenshots/account-screen.jpg)
-![AccountScreen(2/2)](/assets/screenshots/account-screen-2.jpg)
-SettingsScreen
-![SettingsScreen](/assets/screenshots/settings-screen.jpg)
+* HomeScreen
+
+<img src="/assets/screenshots/home-screen.jpg" width="250">
+
+* SearchResultScreen
+
+<img src="/assets/screenshots/search-screen.jpg" width="250">
+
+* TrackingScreen
+
+<img src="/assets/screenshots/tracking-screen.jpg" width="250">
+
+* FavoriteScreen
+
+<img src="/assets/screenshots/favorites-screen-2.jpg" width="250">
+
+* SigninScreen
+
+<img src="/assets/screenshots/sign-in-screen.jpg" width="250">
+
+* SignupScreen
+
+<img src="/assets/screenshots/sign-up-screen.jpg" width="250">
+
+* AccountScreen
+
+<img src="/assets/screenshots/account-screen.jpg" width="250">
+
+<img src="/assets/screenshots/account-screen-2.jpg" width="250">
+
+* SettingsScreen
+
+<img src="/assets/screenshots/settings-screen.jpg" width="250">
