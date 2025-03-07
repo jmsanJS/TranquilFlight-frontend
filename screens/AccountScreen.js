@@ -176,12 +176,10 @@ export default function AccountScreen({ navigation }) {
 
   const handleLogoutAccount = () => {
     dispatch(logout());
-      dispatch(emptyReducer())
-    setTimeout(function(){
+    dispatch(emptyReducer());
+    setTimeout(function () {
       navigation.navigate("Home");
     }, 200);
-    
-    
   };
 
   const deleteAcountAlert = () =>
@@ -374,7 +372,6 @@ export default function AccountScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingTop: Platform.OS === "android" ? "height" : "padding",
     backgroundColor: colors.lightGrey,
   },
   scrollContainer: {

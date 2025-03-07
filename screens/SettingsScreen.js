@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet } from "react-native";
+import { useEffect } from "react";
 import CustomSwitch from "../components/CustomSwitch";
 import { colors } from "../assets/colors";
 import { backendURL } from "../assets/URLs";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   updateTimeFormat,
@@ -16,7 +16,6 @@ export default function SettingsScreen({ navigation }) {
   const dispatch = useDispatch();
   const settings = useSelector((state) => state.settings.value);
   const user = useSelector((state) => state.user.value);
-
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -53,21 +52,22 @@ export default function SettingsScreen({ navigation }) {
   }, [dispatch, user, navigation]);
 
   const updateSettings = async (updatedSettings) => {
-    if (user.token !== null) {
-      try {
-        const response = await fetch(`${backendURL}/user/settings`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            token: user.token,
-            ...updatedSettings,
-          }),
-        });
-        const data = await response.json();
-      } catch (error) {
-        console.error("Error updating settings:", error);
-      }
-    } else {
+    if (!user?.token) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${backendURL}/user/settings`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: user.token,
+          ...updatedSettings,
+        }),
+      });
+      const data = await response.json();
+    } catch (error) {
+      console.error("Error updating settings:", error);
     }
   };
 

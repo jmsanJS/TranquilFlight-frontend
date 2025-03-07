@@ -1,56 +1,28 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Platform,
-  StatusBar,
-  TextInput,
-  TouchableOpacity,
-  ImageBackground,
-  KeyboardAvoidingView,
-} from "react-native";
+import { View, Text, StyleSheet, SafeAreaView } from "react-native";
+import { useState } from "react";
 
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-
-import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addFlight, removeFlight} from "../reducers/flightsResult";
-import { emptyReducer } from '../reducers/favoriteFlights';
-
-
-import { colors } from "../assets/colors";
-
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome";
+import { removeFlight } from "../reducers/flightsResult";
 
 import FlightCard from "../components/FlightCard";
 import SearchBar from "../components/SearchBar";
-
-
+import { colors } from "../assets/colors";
 
 export default function SearchResultScreen({ navigation }) {
-
-  const [flightCardData, setFlightCardData]=useState([])
+  const [flightCardData, setFlightCardData] = useState([]);
 
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.value);
   const flightData = useSelector((state) => state.flightsResult.value);
-  const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
 
-
-  if(flightData.airline){
-    setFlightCardData(flightData) 
+  if (flightData.airline) {
+    setFlightCardData(flightData);
     dispatch(removeFlight());
   }
-
-  //const isFavorite =false
-  
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.searchContainer}>
-        <SearchBar/>
+        <SearchBar />
       </View>
 
       <View style={styles.separatorContainer}>
@@ -60,8 +32,7 @@ export default function SearchResultScreen({ navigation }) {
       </View>
 
       <View style={styles.favoritesTripsContainer}>
-        {flightCardData ? <FlightCard flightData={flightCardData}/> : null}
-        
+        {flightCardData ? <FlightCard flightData={flightCardData} /> : null}
       </View>
     </SafeAreaView>
   );
@@ -104,8 +75,3 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-
-
-
-
-

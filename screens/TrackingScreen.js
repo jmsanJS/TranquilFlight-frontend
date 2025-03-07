@@ -2,8 +2,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Platform,
-  StatusBar,
   TouchableOpacity,
   Image,
 } from "react-native";
@@ -24,12 +22,11 @@ import WeatherCard from "../components/WeatherCard";
 import { kilometersToMiles } from "../modules/settingsOptions";
 
 export default function TrackingScreen({ navigation }) {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.value);
   const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
   const settings = useSelector((state) => state.settings.value);
-  const flightDataTracking = useSelector(
-    (state) => state.flightDataTracking.value
-  );
+  const flightDataTracking = useSelector((state) => state.flightDataTracking.value);
 
   const [departureLength, setDepartureLength] = useState("0");
   const [arrivalLength, setArrivalLength] = useState("0");
@@ -39,10 +36,8 @@ export default function TrackingScreen({ navigation }) {
   const [toArrivalMinutes, setToArrivalMinutes] = useState();
   const [totalFlightHours, setTotalFlightHours] = useState();
   const [totalFlightMinutes, setTotalFlightMinutes] = useState();
-
   const [isFavorited, setIsFavorited] = useState(false);
   const [flightData, setFlightData] = useState({});
-  const dispatch = useDispatch();
 
   useEffect(() => {
     async function fetchFlightData(flightDataTracking) {
@@ -120,11 +115,8 @@ export default function TrackingScreen({ navigation }) {
             );
             setArrivalLength(
               `${
-                90 -
-                Math.round(
-                  (flightDurationInMunutes / totalFlightDurationInMinutes) *
-                    100 *
-                    0.9
+                90 - Math.round(
+                  (flightDurationInMunutes / totalFlightDurationInMinutes) * 100 * 0.9
                 )
               }`
             );
@@ -398,7 +390,6 @@ export default function TrackingScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: {
-    // paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
     padding: 10,
     backgroundColor: colors.lightGrey,
     flex: 1,
@@ -518,7 +509,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: colors.dark1,
     alignSelf: "flex-start",
-    //textAlign:'left',
   },
   distanceAndTimeArrivalInfo: {
     fontSize: 8,
@@ -595,50 +585,21 @@ const styles = StyleSheet.create({
     color: colors.light1,
     fontSize: 14,
     fontWeight: "600",
-    //width: "50%",
     textAlign: "left",
   },
   flightScheduleTimeUnknown: {
     color: colors.light1,
     fontSize: 10,
     fontWeight: "600",
-    //width: "50%",
     textAlign: "left",
   },
   flightScheduleLocalTime: {
     color: colors.light1,
     fontSize: 10,
     fontWeight: "400",
-    //width: "50%",
     textAlign: "left",
   },
   weatherCardContainer: {
     flex: 3,
   },
 });
-
-// let flightData = {
-//   "flightNumber": "TB 1432",
-//   "date": "2024-05-29",
-//   "airline": "TUI  Belgium",
-//   "status": "Departed",
-//   "lastUpdateUTC": "2024-05-29 07:42Z",
-//   "distance": 1250.02,
-//   "departure": {
-//     "iata": "PMI",
-//     "city": "Palma De Mallorca",
-//     "terminal": "N",
-//     "countryCode": "ES",
-//     "scheduledTimeUTC": "2024-05-29 07:05Z",
-//     "scheduledTimeLocal": "2024-05-29 09:05+02:00",
-//     "revisedTimeUTC": "2024-05-29 07:04Z",
-//     "revisedTimeLocal": "2024-05-29 09:04+02:00"
-//   },
-//   "arrival": {
-//     "iata": "LGG",
-//     "city": "Liège",
-//     "countryCode": "BE",
-//     "scheduledTimeUTC": "2024-05-29 09:45Z",
-//     "scheduledTimeLocal": "2024-05-29 11:45+02:00"
-//   }
-// }

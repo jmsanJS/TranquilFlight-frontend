@@ -57,12 +57,12 @@ export default function SigninScreen({ navigation }) {
           setEmail("");
           setPassword("");
           dispatch(login(data.userData));
-          navigation.navigate({name:"Home"});
+          navigation.navigate({ name: "Home" });
         } else if (data.result === false) {
           setErrorMessage(data.error);
           timeoutRef.current = setTimeout(() => {
             setErrorMessage("");
-          }, 4000);      
+          }, 4000);
         }
       });
   };

@@ -1,5 +1,4 @@
 import {
-  View,
   Text,
   StyleSheet,
   SafeAreaView,
@@ -9,11 +8,9 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 
-import { useState, useEffect, useCallback } from "react";
+import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addFlight } from "../reducers/flightsResult";
 import { emptyReducer, addFavorite } from "../reducers/favoriteFlights";
-import { emptyFlight } from "../reducers/flightDataTracking";
 import {
   updateTimeFormat,
   updateDistanceUnit,
@@ -22,17 +19,13 @@ import {
   resetSettingsReducer,
 } from "../reducers/settings";
 
-import { colors } from "../assets/colors";
-
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import SearchBar from "../components/SearchBar";
 import { backendURL } from '../assets/URLs';
+import { colors } from "../assets/colors";
 
 export default function HomeScreen({ navigation }) {
   const dispatch = useDispatch();
-
   const user = useSelector((state) => state.user.value);
-  const favoriteFlights = useSelector((state) => state.favoriteFlights.value);
 
   const fetchSettings = useCallback(async () => {
     if (user.token !== null) {

@@ -197,7 +197,7 @@ export default function SignupScreen({ navigation }) {
           </View>
           <TouchableOpacity
             style={styles.loginBtn}
-            onPress={() => {handleSubmit(); }}
+            onPress={handleSubmit}
           >
             <Text style={styles.loginBtnTxt}>Inscription</Text>
           </TouchableOpacity>
