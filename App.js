@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, SafeAreaView, LogBox } from "react-native";
+import { StyleSheet, View, LogBox } from "react-native";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -30,7 +29,7 @@ import settings from "./reducers/settings";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 LogBox.ignoreAllLogs();
 
@@ -54,7 +53,6 @@ const store = configureStore({
 
 const persistor = persistStore(store);
 
-const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const AccountStack = createNativeStackNavigator();

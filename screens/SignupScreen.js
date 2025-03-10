@@ -1,15 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  StatusBar,
-  TouchableOpacity,
-  TextInput,
-  KeyboardAvoidingView,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, Platform, TouchableOpacity, TextInput, KeyboardAvoidingView, ScrollView } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import * as Crypto from "expo-crypto";
 import { colors } from "../assets/colors";

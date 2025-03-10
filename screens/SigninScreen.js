@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Platform,
-  StatusBar,
-  TouchableOpacity,
-  TextInput,
-  KeyboardAvoidingView,
-} from "react-native";
+import { View, Text, StyleSheet, Platform, StatusBar, TouchableOpacity, TextInput, KeyboardAvoidingView } from "react-native";
 import { useState, useEffect, useRef } from "react";
 
 import { colors } from "../assets/colors";
