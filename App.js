@@ -31,6 +31,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useSelector } from "react-redux";
 
+// Ignore all log notifications in development (errors, warnings, logs)
 LogBox.ignoreAllLogs();
 
 const reducers = combineReducers({
